@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.LinkedList;
 
 public class Usuario {
+	private String idUsuario;
 	private Persona persona; 				/** @see Persona */
 	private CuentaBancaria cuentaBancaria;	/** @see CuentaBancaria */
 	private List<Preguntas> preguntas; 		/** @see Preguntas */
 	private Activo[] activos; 				/** @see Activo */
 	private List<Defi> defis; 				/** @see Defi */
-	private String idUsuario;
 	private String contrasenia;
 	private String mail;
 	private String monedaFiad;
