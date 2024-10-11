@@ -9,16 +9,18 @@ public abstract class Moneda {
 	private double cantidad;
 	private String nombre;
 	private String nomenclatura;
+	private double volatilidad;
 	
 	/** 
 	 * @param precio; Este dato nos lo brindará la ApiCriptomonedas con el precio actual de la criptomoneda.
 	 */
 	
-	public Moneda(double precio, double cantidad, String nombre, String nomenclatura) {
+	public Moneda(double precio, double cantidad, String nombre, String nomenclatura, double volatilidad) {
 		this.precio = precio;
 		this.cantidad = cantidad;
 		this.nombre = nombre;
 		this.nomenclatura = nomenclatura;
+		this.volatilidad = volatilidad;
 	}
 
 	public double getPrecio() {
@@ -27,6 +29,14 @@ public abstract class Moneda {
 
 	public void setPrecio(double precio) {
 		this.precio = precio;
+	}
+	
+	public double getVolatilidad() {
+		return volatilidad;
+	}
+
+	public void setVolatilidad(double volatilidad) {
+		this.volatilidad = volatilidad;
 	}
 
 	public double getCantidad() {

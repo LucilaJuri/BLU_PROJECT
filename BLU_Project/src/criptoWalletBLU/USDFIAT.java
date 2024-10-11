@@ -6,8 +6,8 @@ package criptoWalletBLU;
 
 public class USDFIAT extends Moneda {
 
-	public USDFIAT(double precio, double cantidad, String nombre, String nomenclatura) {
-		super(precio, cantidad, nombre, nomenclatura);
+	public USDFIAT(double precio, double cantidad, String nombre, String nomenclatura, double volatilidad) {
+		super(precio, cantidad, nombre, nomenclatura, volatilidad);
 	}
 
 }

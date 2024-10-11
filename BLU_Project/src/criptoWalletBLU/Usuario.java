@@ -67,16 +67,16 @@ public class Usuario {
 	 */
 	private void crearActivos(Activo[] activos) {
 		activos = new Activo[10];
-		activos[0] = new Activo("direccion aleatoria",new DogecoinCripto(1,0,"DogecoinCripto","DOGE"));
-		activos[1] = new Activo("direccion aleatoria",new USDCCripto(1,0,"USDCCripto","USDC"));
-		activos[2] = new Activo("direccion aleatoria",new BitcoinCripto(1,0,"BitcoinCripto","BTC"));
-		activos[3] = new Activo("direccion aleatoria",new USDTCripto(1,0,"USDTCripto","USDT"));
-		activos[4] = new Activo("direccion aleatoria",new EthereumCripto(1,0,"EthereumCripto0","ETH"));
-		activos[5] = new Activo("direccion aleatoria",new DolarZimbabuenseFIAT(1,0,"DolarZimbabuenseFIAT","ZWD"));
-		activos[6] = new Activo("direccion aleatoria",new PesoArgFIAT(1,0,"PesoArgFIAT","ARG"));
-		activos[7] = new Activo("direccion aleatoria",new USDFIAT(1,0,"USDFIAT","USD"));
-		activos[8] = new Activo("direccion aleatoria",new EuroFIAT(1,0,"EuroFIAT","EUR"));
-		activos[9] = new Activo("direccion aleatoria",new LibraFIAT(1,0,"LibraFIAT","GBP"));
+		activos[0] = new Activo("direccion aleatoria",new DogecoinCripto(1,0,"DogecoinCripto","DOGE",0));
+		activos[1] = new Activo("direccion aleatoria",new USDCCripto(1,0,"USDCCripto","USDC",0));
+		activos[2] = new Activo("direccion aleatoria",new BitcoinCripto(1,0,"BitcoinCripto","BTC",0));
+		activos[3] = new Activo("direccion aleatoria",new USDTCripto(1,0,"USDTCripto","USDT",0));
+		activos[4] = new Activo("direccion aleatoria",new EthereumCripto(1,0,"EthereumCripto0","ETH",0));
+		activos[5] = new Activo("direccion aleatoria",new DolarZimbabuenseFIAT(1,0,"DolarZimbabuenseFIAT","ZWD",0));
+		activos[6] = new Activo("direccion aleatoria",new PesoArgFIAT(1,0,"PesoArgFIAT","ARG",0));
+		activos[7] = new Activo("direccion aleatoria",new USDFIAT(1,0,"USDFIAT","USD",0));
+		activos[8] = new Activo("direccion aleatoria",new EuroFIAT(1,0,"EuroFIAT","EUR",0));
+		activos[9] = new Activo("direccion aleatoria",new LibraFIAT(1,0,"LibraFIAT","GBP",0));
 	}
 
 	public Persona getPersona() {

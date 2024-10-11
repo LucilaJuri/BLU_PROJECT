@@ -6,8 +6,8 @@ package criptoWalletBLU;
 
 public class EuroFIAT extends Moneda {
 
-	public EuroFIAT(double precio, double cantidad, String nombre, String nomenclatura) {
-		super(precio, cantidad, nombre, nomenclatura);
+	public EuroFIAT(double precio, double cantidad, String nombre, String nomenclatura, double volatilidad) {
+		super(precio, cantidad, nombre, nomenclatura, volatilidad);
 	}
 
 }

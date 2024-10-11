@@ -6,8 +6,8 @@ package criptoWalletBLU;
 
 public class DogecoinCripto extends Moneda {
 
-	public DogecoinCripto(double precio, double cantidad, String nombre, String nomenclatura) {
-		super(precio, cantidad, nombre, nomenclatura);
+	public DogecoinCripto(double precio, double cantidad, String nombre, String nomenclatura, double volatilidad) {
+		super(precio, cantidad, nombre, nomenclatura, volatilidad);
 	}
 
 }
