@@ -2,7 +2,9 @@
  *  @author Cladera,  Blas Martin
  */
 
-package criptoWalletBLU;
+package criptoWalletBLU.CLASES;
+
+import criptoWalletBLU.Moneda;
 
 public class Activo {
 	private String direccion; 

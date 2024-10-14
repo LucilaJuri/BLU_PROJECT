@@ -4,7 +4,7 @@
 
 package criptoWalletBLU;
 
-public abstract class Moneda {
+public class Moneda {
 	private double precio;
 	private double cantidad;
 	private String nombre;
@@ -31,6 +31,12 @@ public abstract class Moneda {
 		this.precio = precio;
 	}
 	
+	@Override
+	public String toString() {
+		return "Moneda [precio=" + precio + ", cantidad=" + cantidad + ", nombre=" + nombre + ", nomenclatura="
+				+ nomenclatura + ", volatilidad=" + volatilidad + "]";
+	}
+
 	public double getVolatilidad() {
 		return volatilidad;
 	}

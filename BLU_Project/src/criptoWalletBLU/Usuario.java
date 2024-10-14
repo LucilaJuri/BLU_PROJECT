@@ -4,6 +4,9 @@
 
 package criptoWalletBLU;
 import java.util.List;
+
+import criptoWalletBLU.CLASES.Activo;
+
 import java.util.LinkedList;
 
 public class Usuario {
