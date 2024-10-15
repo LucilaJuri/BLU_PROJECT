@@ -46,4 +46,37 @@ public class STOCKDAOJDBC implements STOCKDAO {
 			return null;
 		}
 	}
+	
+	public int contarSTOCK() {
+		Connection coneccion = null;
+		try {
+			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
+			Statement st = coneccion.createStatement();
+			String sql = ("SELECT COUNT(*) FROM STOCK");
+			return st.executeQuery(sql).getInt(1);
+		}
+		catch(SQLException e) {
+			System.out.println("no se pudo conectar a la BD.");
+			return 0;
+		}
+	}
+
+	@Override
+	public int updateCantidad(int i, double cantidad) {
+		Connection coneccion = null;
+		System.out.println(cantidad);
+		try {
+			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
+			Statement st = coneccion.createStatement();
+			String sql = ("UPDATE STOCK "+
+						"SET CANTIDAD = "+cantidad+
+						" WHERE id = "+i+";");
+			return st.executeUpdate(sql);
+		}
+		catch(SQLException e) {
+			System.out.println("no se pudo conectar a la BD."+e.getMessage());
+			return 0;
+		}
+	}
+	
 }

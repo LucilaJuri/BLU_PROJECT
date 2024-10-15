@@ -11,7 +11,7 @@ public class PruebasEntregable2 {
 
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
-		//crearMoneda(in);
+		generarStock();
 		listarStock(in);
 	}
 
@@ -45,7 +45,14 @@ public class PruebasEntregable2 {
 		else System.out.println("Operacion cancelada.");
 	}
 	
-	public static void listarStock(Scanner in) {
+	public static void listarMonedas(Scanner in) {
+		System.out.println("Ingrese criterio de ordenacion (VALOR/NOMENCLATURA)");
+		String i = in.next().toUpperCase();
+		while ((!i.equals("VALOR"))&& (!i.equals("NOMENCLATURA"))){
+			System.out.println("ERROR: criterio no válido");
+			System.out.println("Ingrese criterio de ordenacion (VALOR/NOMENCLATURA)");
+			i = in.next().toUpperCase();
+		}
 		STOCKDAO stockDao = FACTORYDAO.getSTOCKDAO();
 		List<Moneda> l = new ArrayList<Moneda>();
 		ResultSet result = stockDao.selectSTOCK();
@@ -56,7 +63,40 @@ public class PruebasEntregable2 {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		l.sort(new ComparadorNomenclatura());
-		System.out.println(l.toString());
+		if (i.equals("VALOR"))l.sort(new ComparadorValor());
+		else l.sort(new ComparadorNomenclatura());
+		for (Moneda moneda : l) System.out.println(moneda.getNomenclatura()+" "+moneda.getNombre()+" "+moneda.getPrecio());
+	}
+	
+	public static void listarStock(Scanner in) {
+		System.out.println("Ingrese criterio de ordenacion (CANTIDAD/NOMENCLATURA)");
+		String i = in.next().toUpperCase();
+		while ((!i.equals("CANTIDAD"))&& (!i.equals("NOMENCLATURA"))){
+			System.out.println("ERROR: criterio no válido");
+			System.out.println("Ingrese criterio de ordenacion (CANTIDAD/NOMENCLATURA)");
+			i = in.next().toUpperCase();
+		}
+		STOCKDAO stockDao = FACTORYDAO.getSTOCKDAO();
+		List<Moneda> l = new ArrayList<Moneda>();
+		ResultSet result = stockDao.selectSTOCK();
+		try {
+			while(result.next()) {
+				l.add(new Moneda(result.getDouble("PRECIO"),result.getDouble("CANTIDAD") , result.getString("NOMBRE"), result.getString("NOMENCLATURA"), result.getDouble("VOLATILIDAD")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (i.equals("CANTIDAD"))l.sort(new ComparadorCantidad());
+		else l.sort(new ComparadorNomenclatura());
+		for (Moneda moneda : l) System.out.println(moneda.getNomenclatura()+" "+moneda.getNombre()+" "+moneda.getCantidad());
+	}
+	
+	public static void generarStock() {
+		System.out.println("hola");
+		STOCKDAO stockDao = FACTORYDAO.getSTOCKDAO();
+		int cant = stockDao.contarSTOCK();
+		for (int i=1; i<=cant; i++) {
+			stockDao.updateCantidad(i, Math.random()*10001);
+		}
 	}
 }
