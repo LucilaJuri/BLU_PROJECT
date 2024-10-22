@@ -2,10 +2,10 @@
  *  @author Cladera,  Blas Martin
  */
 
-package criptoWalletBLU;
+package criptoWalletBLU.CLASES;
 import java.util.List;
 
-import criptoWalletBLU.CLASES.Activo;
+import criptoWalletBLU.CLASES.MONEDAS.*;
 
 import java.util.LinkedList;
 

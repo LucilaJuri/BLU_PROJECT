@@ -9,5 +9,7 @@ public interface STOCKDAO {
 	
 	public int contarSTOCK();
 	
-	public int updateCantidad(int i, double cantidad);
+	public int updateCantidad(String nomenclatura, double cantidad);
+	
+	public ResultSet selectNomenclaturas();
 }

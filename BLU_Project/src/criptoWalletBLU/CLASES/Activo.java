@@ -4,8 +4,6 @@
 
 package criptoWalletBLU.CLASES;
 
-import criptoWalletBLU.Moneda;
-
 public class Activo {
 	private String direccion; 
 	private Moneda moneda;		/** @see Moneda */

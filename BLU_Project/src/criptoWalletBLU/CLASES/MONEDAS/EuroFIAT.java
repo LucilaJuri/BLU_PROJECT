@@ -2,7 +2,9 @@
  *  @author Cladera,  Blas Martin
  */
 
-package criptoWalletBLU;
+package criptoWalletBLU.CLASES.MONEDAS;
+
+import criptoWalletBLU.CLASES.Moneda;
 
 public class EuroFIAT extends Moneda {
 

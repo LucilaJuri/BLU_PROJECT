@@ -1,6 +1,8 @@
-package criptoWalletBLU;
+package criptoWalletBLU.COMPARATORS;
 
 import java.util.Comparator;
+
+import criptoWalletBLU.CLASES.Moneda;
 
 public class ComparadorCantidad implements Comparator<Moneda> {
 	public int compare(Moneda m1, Moneda m2) {

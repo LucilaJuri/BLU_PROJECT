@@ -1,18 +1,23 @@
-package criptoWalletBLU;
+package criptoWalletBLU.SERVICIOS;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner; 
+import java.util.Scanner;
+
+import criptoWalletBLU.CLASES.Moneda;
+import criptoWalletBLU.COMPARATORS.ComparadorCantidad;
+import criptoWalletBLU.COMPARATORS.ComparadorNomenclatura;
+import criptoWalletBLU.COMPARATORS.ComparadorValor;
 import criptoWalletBLU.DAO.*;
 
 public class PruebasEntregable2 {
 
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
-		generarStock();
-		listarStock(in);
+		crearActivo(in);
+		listarActivos(in);
 	}
 
 	public static void crearMoneda(Scanner in) {
@@ -92,11 +97,79 @@ public class PruebasEntregable2 {
 	}
 	
 	public static void generarStock() {
-		System.out.println("hola");
 		STOCKDAO stockDao = FACTORYDAO.getSTOCKDAO();
-		int cant = stockDao.contarSTOCK();
-		for (int i=1; i<=cant; i++) {
-			stockDao.updateCantidad(i, Math.random()*10001);
+		ResultSet result = stockDao.selectNomenclaturas();
+		List<String> l = new ArrayList<String>();
+		try {
+			while(result.next()) {
+				l.add(result.getString("NOMENCLATURA"));
+			}
+			for (String nomenclatura : l) {
+				stockDao.updateCantidad(nomenclatura, Math.random()*10001);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
+	
+	public static int crearActivo(Scanner in) {
+		STOCKDAO stockDao = FACTORYDAO.getSTOCKDAO();
+		ResultSet result = stockDao.selectNomenclaturas();
+		List<String> l = new ArrayList<String>();
+		try {
+			while(result.next()) {
+				l.add(result.getString("NOMENCLATURA"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Ingrese nomenclatura");
+		System.out.println(l.toString());
+		String nomenclatura = in.next().toUpperCase();
+		if (!l.contains(nomenclatura)) {
+			System.out.println("ERROR");
+			return -1;
+		}
+		System.out.println("Ingrese cantidad");
+		double cantidad = in.nextDouble();
+		System.out.println("Confirmar operacion (Y/N)");
+		String confirmar = in.next().toUpperCase();
+		while ((!confirmar.equals("Y"))&& (!confirmar.equals("N"))){
+			System.out.println("ERROR");
+			System.out.println("Confirmar operacion (Y/N)");
+			confirmar = in.next().toUpperCase();
+		}
+		if (confirmar.equals("Y")) {
+			ACTIVODAO activoDao = FACTORYDAO.getACTIVODAO();
+			return activoDao.instertACTIVO(0, cantidad, nomenclatura);
+		}
+		else System.out.println("Operacion cancelada.");
+		return 0;
+	}
+	
+	public static void listarActivos(Scanner in) {
+		System.out.println("Ingrese criterio de ordenacion (CANTIDAD/NOMENCLATURA)");
+		String i = in.next().toUpperCase();
+		while ((!i.equals("CANTIDAD"))&& (!i.equals("NOMENCLATURA"))){
+			System.out.println("ERROR: criterio no válido");
+			System.out.println("Ingrese criterio de ordenacion (CANTIDAD/NOMENCLATURA)");
+			i = in.next().toUpperCase();
+		}
+		//System.out.println("Ingrese idUsuario: ");
+		//int idusuario = in.nextInt();
+		ACTIVODAO activoDao = FACTORYDAO.getACTIVODAO();
+		List<Moneda> l = new ArrayList<Moneda>();
+		ResultSet result = activoDao.selectACTIVOS(0);
+		try {
+			while(result.next()) {
+				l.add(new Moneda(0,result.getDouble("CANTIDAD") ,"", result.getString("NOMENCLATURA"),0));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (i.equals("CANTIDAD"))l.sort(new ComparadorCantidad());
+		else l.sort(new ComparadorNomenclatura());
+		for (Moneda moneda : l) System.out.println(moneda.getNomenclatura()+" "+moneda.getNombre()+" "+moneda.getCantidad());
+	}
+	
 }

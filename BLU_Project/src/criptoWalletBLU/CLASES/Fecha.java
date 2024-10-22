@@ -2,7 +2,7 @@
  *  @author Cladera,  Blas Martin
  */
 
-package criptoWalletBLU;
+package criptoWalletBLU.CLASES;
 
 public class Fecha {
 	private int dia;
