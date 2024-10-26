@@ -5,6 +5,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import criptoWalletBLU.CLASES.Moneda;
 
 public class ACTIVODAOJDBC implements ACTIVODAO {
 
@@ -29,14 +33,20 @@ public class ACTIVODAOJDBC implements ACTIVODAO {
 		}
 	}
 	
-	public ResultSet selectACTIVOS(int idusuario) {
+	public List<Moneda> selectACTIVOS(int idusuario) {
 		Connection coneccion = null;
+		List<Moneda> listaActivos = new ArrayList<Moneda>();
 		try {
 			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
 			Statement st = coneccion.createStatement();
 			String sql = ("SELECT * FROM ACTIVOS WHERE IDUSUARIO="+idusuario+";");
 			ResultSet result = st.executeQuery(sql);
-			return result;
+			while(result.next()) {
+				listaActivos.add(new Moneda(0,result.getDouble("CANTIDAD") ,"", result.getString("NOMENCLATURA"),0));
+			}
+			coneccion.close();
+			st.close();
+			return listaActivos;
 		}
 		catch(SQLException e) {
 			System.out.println("no se pudo conectar a la BD.");

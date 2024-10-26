@@ -16,11 +16,9 @@ public class PruebasEntregable2 {
 
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
-		mosequenombreponerle(in);
-		listarStock(in);
-		listarActivos(in);
+		generarStock();
 	}
-
+	/*
 	public static void crearMoneda(Scanner in) {
 		System.out.println("Ingrese tipo (CRIPTO o FIAT)");
 		String tipo = in.next().toUpperCase();
@@ -96,7 +94,7 @@ public class PruebasEntregable2 {
 		else l.sort(new ComparadorNomenclatura());
 		for (Moneda moneda : l) System.out.println(moneda.getNomenclatura()+" "+moneda.getNombre()+" "+moneda.getCantidad());
 	}
-	
+	*/
 	public static void generarStock() {
 		STOCKDAO stockDao = FACTORYDAO.getSTOCKDAO();
 		ResultSet result = stockDao.selectNomenclaturas();
@@ -112,7 +110,7 @@ public class PruebasEntregable2 {
 			e.printStackTrace();
 		}
 	}
-	
+	/*
 	public static int crearActivo(Scanner in) {
 		STOCKDAO stockDao = FACTORYDAO.getSTOCKDAO();
 		ResultSet result = stockDao.selectNomenclaturas();
@@ -174,7 +172,7 @@ public class PruebasEntregable2 {
 		else l.sort(new ComparadorNomenclatura());
 		for (Moneda moneda : l) System.out.println(moneda.getNomenclatura()+" "+moneda.getNombre()+" "+moneda.getCantidad());
 	}
-	
+	*/
 	private static void mosequenombreponerle(Scanner in) {
 		STOCKDAO stockDao = FACTORYDAO.getSTOCKDAO();
 		ACTIVODAO activoDao = FACTORYDAO.getACTIVODAO();
@@ -188,15 +186,8 @@ public class PruebasEntregable2 {
 		double precioCripto=0;
 		double cantidadEnStock=0;
 		double cantidadActivo=0;
-		
-		try {
-			ResultSet result = stockDao.selectNomenclaturasCripto();
-			while(result.next()) {
-				listaCriptos.add(result.getString("NOMENCLATURA"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
+		listaCriptos = stockDao.selectNomenclaturasCripto();
 		
 		System.out.println("Ingrese CRIPTOMONEDA a comprar:");
 		System.out.println(listaCriptos.toString());
@@ -208,15 +199,7 @@ public class PruebasEntregable2 {
 			criptomonedaElegida = in.next().toUpperCase();
 		}
 		
-		try {
-			ResultSet result = stockDao.selectNomenclaturasFiat();
-			while(result.next()) {
-				listaFiats.add(result.getString("NOMENCLATURA"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
+		listaFiats=stockDao.selectNomenclaturasFiat();
 		System.out.println("Ingrese FIAT a convertir:");
 		System.out.println(listaFiats.toString());
 		String fiatElegida = in.next().toUpperCase();
@@ -229,14 +212,7 @@ public class PruebasEntregable2 {
 		
 		System.out.println("Ingrese cantidad de "+fiatElegida+" a convertir:");
 		double cantidadElegida = in.nextInt();
-		ResultSet result = activoDao.selectACTIVOS(0);
-		try {
-			while(result.next()) {
-				listaActivos.add(new Moneda(0,result.getDouble("CANTIDAD") ,"", result.getString("NOMENCLATURA"),0));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		listaActivos=activoDao.selectACTIVOS(0);
 		for (Moneda activo : listaActivos) {
 			if(activo.getNomenclatura().equals(fiatElegida)) {
 				if(activo.getCantidad()>=cantidadElegida) {
@@ -259,17 +235,10 @@ public class PruebasEntregable2 {
 				break;
 			}
 		}
-		
-		try {
-			result = stockDao.selectPrecioNomenclatura(fiatElegida);
-			fiatElegidaMoneda.setPrecio(result.getDouble("PRECIO"));
-			result = stockDao.selectPrecioNomenclatura(criptomonedaElegida);
-			precioCripto=(result.getDouble("PRECIO"));
-			result = stockDao.selectCantidadNomenclatura(criptomonedaElegida);
-			cantidadEnStock=(result.getDouble("CANTIDAD"));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+
+		fiatElegidaMoneda.setPrecio(stockDao.selectPrecioNomenclatura(fiatElegida));
+		precioCripto=(stockDao.selectPrecioNomenclatura(criptomonedaElegida));
+		cantidadEnStock=(stockDao.selectCantidadNomenclatura(criptomonedaElegida));
 		
 		cantidadComprada=fiatElegidaMoneda.convertir(cantidadElegida, precioCripto);
 		if (cantidadComprada>cantidadEnStock) {

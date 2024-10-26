@@ -1,11 +1,14 @@
 package criptoWalletBLU.DAO;
 
 import java.sql.ResultSet;
+import java.util.List;
+
+import criptoWalletBLU.CLASES.Moneda;
 
 public interface ACTIVODAO {
 	public int instertACTIVO(int idusuario, double cantidad, String nomenclatura);
 	
-	public ResultSet selectACTIVOS(int idusuario);
+	public List<Moneda> selectACTIVOS(int idusuario);
 	
 	public ResultSet selectNomenclaturas(int idusuario);
 	
