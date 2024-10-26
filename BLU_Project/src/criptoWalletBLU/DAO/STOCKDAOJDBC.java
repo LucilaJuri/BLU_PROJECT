@@ -69,11 +69,10 @@ public class STOCKDAOJDBC implements STOCKDAO {
 			String sql = ("UPDATE STOCK "+
 						"SET CANTIDAD = "+cantidad+
 						" WHERE NOMENCLATURA='"+nomenclatura+"';");
-			int result = st.executeUpdate(sql);
-			return result;
+			return st.executeUpdate(sql);
 		}
 		catch(SQLException e) {
-			System.out.println("no se pudo conectar a la BD."+e.getMessage());
+			System.out.println(e.getMessage());
 			return 0;
 		}
 	}
@@ -84,6 +83,62 @@ public class STOCKDAOJDBC implements STOCKDAO {
 			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
 			Statement st = coneccion.createStatement();
 			String sql = ("SELECT NOMENCLATURA FROM STOCK");
+			ResultSet result = st.executeQuery(sql);
+			return result;
+		}
+		catch(SQLException e) {
+			System.out.println("no se pudo conectar a la BD."+e.getMessage());
+			return null;
+		}
+	}
+	public ResultSet selectNomenclaturasCripto() {
+		Connection coneccion = null;
+		try {
+			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
+			Statement st = coneccion.createStatement();
+			String sql = ("SELECT NOMENCLATURA FROM STOCK WHERE TIPO='CRIPTO'");
+			ResultSet result = st.executeQuery(sql);
+			return result;
+		}
+		catch(SQLException e) {
+			System.out.println("no se pudo conectar a la BD."+e.getMessage());
+			return null;
+		}
+	}
+	public ResultSet selectNomenclaturasFiat() {
+		Connection coneccion = null;
+		try {
+			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
+			Statement st = coneccion.createStatement();
+			String sql = ("SELECT NOMENCLATURA FROM STOCK WHERE TIPO='FIAT'");
+			ResultSet result = st.executeQuery(sql);
+			return result;
+		}
+		catch(SQLException e) {
+			System.out.println("no se pudo conectar a la BD."+e.getMessage());
+			return null;
+		}
+	}
+	public ResultSet selectPrecioNomenclatura(String nomenclatura) {
+		Connection coneccion = null;
+		try {
+			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
+			Statement st = coneccion.createStatement();
+			String sql = ("SELECT PRECIO FROM STOCK WHERE NOMENCLATURA='"+nomenclatura+"';");
+			ResultSet result = st.executeQuery(sql);
+			return result;
+		}
+		catch(SQLException e) {
+			System.out.println("no se pudo conectar a la BD."+e.getMessage());
+			return null;
+		}
+	}
+	public ResultSet selectCantidadNomenclatura(String nomenclatura) {
+		Connection coneccion = null;
+		try {
+			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
+			Statement st = coneccion.createStatement();
+			String sql = ("SELECT CANTIDAD FROM STOCK WHERE NOMENCLATURA='"+nomenclatura+"';");
 			ResultSet result = st.executeQuery(sql);
 			return result;
 		}

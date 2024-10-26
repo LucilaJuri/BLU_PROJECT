@@ -43,5 +43,36 @@ public class ACTIVODAOJDBC implements ACTIVODAO {
 			return null;
 		}
 	}
+	
+	public ResultSet selectNomenclaturas(int idusuario) {
+		Connection coneccion = null;
+		try {
+			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
+			Statement st = coneccion.createStatement();
+			String sql = ("SELECT NOMENCLATURA, CANTIDAD FROM ACTIVOS WHERE IDUSUARIO="+idusuario+";");
+			ResultSet result = st.executeQuery(sql);
+			return result;
+		}
+		catch(SQLException e) {
+			System.out.println("no se pudo conectar a la BD."+e.getMessage());
+			return null;
+		}
+	}
+	
+	public int updateCantidad(String nomenclatura, double cantidad, int idusuario) {
+		Connection coneccion = null;
+		try {
+			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
+			Statement st = coneccion.createStatement();
+			String sql = ("UPDATE ACTIVOS "+
+						"SET CANTIDAD = "+cantidad+
+						" WHERE NOMENCLATURA='"+nomenclatura+"' AND IDUSUARIO = "+idusuario+";");
+			return st.executeUpdate(sql);
+		}
+		catch(SQLException e) {
+			System.out.println(e.getMessage());
+			return 0;
+		}
+	}
 
 }

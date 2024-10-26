@@ -16,7 +16,8 @@ public class PruebasEntregable2 {
 
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
-		crearActivo(in);
+		mosequenombreponerle(in);
+		listarStock(in);
 		listarActivos(in);
 	}
 
@@ -126,9 +127,11 @@ public class PruebasEntregable2 {
 		System.out.println("Ingrese nomenclatura");
 		System.out.println(l.toString());
 		String nomenclatura = in.next().toUpperCase();
-		if (!l.contains(nomenclatura)) {
+		while (!l.contains(nomenclatura)) {
 			System.out.println("ERROR");
-			return -1;
+			System.out.println("Ingrese nomenclatura");
+			System.out.println(l.toString());
+			nomenclatura = in.next().toUpperCase();
 		}
 		System.out.println("Ingrese cantidad");
 		double cantidad = in.nextDouble();
@@ -172,4 +175,110 @@ public class PruebasEntregable2 {
 		for (Moneda moneda : l) System.out.println(moneda.getNomenclatura()+" "+moneda.getNombre()+" "+moneda.getCantidad());
 	}
 	
+	private static void mosequenombreponerle(Scanner in) {
+		STOCKDAO stockDao = FACTORYDAO.getSTOCKDAO();
+		ACTIVODAO activoDao = FACTORYDAO.getACTIVODAO();
+		List<String> listaCriptos = new ArrayList<String>();
+		List<String> listaFiats = new ArrayList<String>();
+		List<Moneda> listaActivos = new ArrayList<Moneda>();
+		Moneda fiatElegidaMoneda = new Moneda();
+		boolean validacion = false;
+		boolean existeCripto=false;
+		double cantidadComprada;
+		double precioCripto=0;
+		double cantidadEnStock=0;
+		double cantidadActivo=0;
+		
+		try {
+			ResultSet result = stockDao.selectNomenclaturasCripto();
+			while(result.next()) {
+				listaCriptos.add(result.getString("NOMENCLATURA"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("Ingrese CRIPTOMONEDA a comprar:");
+		System.out.println(listaCriptos.toString());
+		String criptomonedaElegida = in.next().toUpperCase();
+		while (!listaCriptos.contains(criptomonedaElegida)) {
+			System.out.println("ERROR: CRIPTOMONEDA no valida.");
+			System.out.println("Ingrese CRIPTOMONEDA a comprar:");
+			System.out.println(listaCriptos.toString());
+			criptomonedaElegida = in.next().toUpperCase();
+		}
+		
+		try {
+			ResultSet result = stockDao.selectNomenclaturasFiat();
+			while(result.next()) {
+				listaFiats.add(result.getString("NOMENCLATURA"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("Ingrese FIAT a convertir:");
+		System.out.println(listaFiats.toString());
+		String fiatElegida = in.next().toUpperCase();
+		while (!listaFiats.contains(fiatElegida)) {
+			System.out.println("ERROR: FIAT no valida.");
+			System.out.println("Ingrese FIAT a convertir:");
+			System.out.println(listaFiats.toString());
+			fiatElegida = in.next().toUpperCase();
+		}
+		
+		System.out.println("Ingrese cantidad de "+fiatElegida+" a convertir:");
+		double cantidadElegida = in.nextInt();
+		ResultSet result = activoDao.selectACTIVOS(0);
+		try {
+			while(result.next()) {
+				listaActivos.add(new Moneda(0,result.getDouble("CANTIDAD") ,"", result.getString("NOMENCLATURA"),0));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		for (Moneda activo : listaActivos) {
+			if(activo.getNomenclatura().equals(fiatElegida)) {
+				if(activo.getCantidad()>=cantidadElegida) {
+					cantidadActivo=activo.getCantidad();
+					validacion = true;
+					break;
+				}
+				System.out.println("ERROR: fondos insuficientes.");
+				return;
+			}
+		}
+		if (!validacion) {
+			System.out.println("ERROR: no posee esa FIAT");
+			return;
+		}
+		
+		for (Moneda activo : listaActivos) {
+			if(activo.getNomenclatura().equals(criptomonedaElegida)) {
+				existeCripto=true;
+				break;
+			}
+		}
+		
+		try {
+			result = stockDao.selectPrecioNomenclatura(fiatElegida);
+			fiatElegidaMoneda.setPrecio(result.getDouble("PRECIO"));
+			result = stockDao.selectPrecioNomenclatura(criptomonedaElegida);
+			precioCripto=(result.getDouble("PRECIO"));
+			result = stockDao.selectCantidadNomenclatura(criptomonedaElegida);
+			cantidadEnStock=(result.getDouble("CANTIDAD"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		cantidadComprada=fiatElegidaMoneda.convertir(cantidadElegida, precioCripto);
+		if (cantidadComprada>cantidadEnStock) {
+			System.out.println("ERROR: no hay STOCK suficiente de: "+criptomonedaElegida);
+			return;
+		}
+
+		stockDao.updateCantidad(criptomonedaElegida, cantidadEnStock-cantidadComprada);
+		activoDao.updateCantidad(fiatElegida, cantidadActivo-cantidadElegida, 0);
+		
+	}
 }

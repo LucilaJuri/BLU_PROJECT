@@ -12,4 +12,12 @@ public interface STOCKDAO {
 	public int updateCantidad(String nomenclatura, double cantidad);
 	
 	public ResultSet selectNomenclaturas();
+	
+	public ResultSet selectNomenclaturasCripto();
+	
+	public ResultSet selectNomenclaturasFiat();
+	
+	public ResultSet selectPrecioNomenclatura(String nomenclatura);
+	
+	public ResultSet selectCantidadNomenclatura(String nomenclatura);
 }
