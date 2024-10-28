@@ -3,10 +3,12 @@ package criptoWalletBLU.SERVICIOS;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
 
 import criptoWalletBLU.CLASES.Moneda;
+import criptoWalletBLU.CLASES.OperacionCompra;
 import criptoWalletBLU.COMPARATORS.ComparadorCantidad;
 import criptoWalletBLU.COMPARATORS.ComparadorNomenclatura;
 import criptoWalletBLU.COMPARATORS.ComparadorValor;
@@ -16,7 +18,8 @@ public class PruebasEntregable2 {
 
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
-		generarStock();
+		mosequenombreponerle(in);
+		
 	}
 	/*
 	public static void crearMoneda(Scanner in) {
@@ -249,5 +252,16 @@ public class PruebasEntregable2 {
 		stockDao.updateCantidad(criptomonedaElegida, cantidadEnStock-cantidadComprada);
 		activoDao.updateCantidad(fiatElegida, cantidadActivo-cantidadElegida, 0);
 		
+		if (existeCripto) {
+			double cantidadCriptomoneda = activoDao.selectCantidadNomenclatura(criptomonedaElegida);
+			activoDao.updateCantidad(criptomonedaElegida, cantidadCriptomoneda+cantidadComprada, 0);
+		}
+		else {
+			activoDao.insertACTIVO(0, cantidadComprada, criptomonedaElegida);
+		}
+		
+		OperacionCompra datosOperacion = new OperacionCompra(criptomonedaElegida,fiatElegida,cantidadComprada,cantidadElegida,Calendar.getInstance().getTime().toString());
+		DATOSCOMPRADAO compraDAO=FACTORYDAO.getDATOSCOMPRADAO();
+		compraDAO.insertDATOSCOMPRA(datosOperacion);
 	}
 }

@@ -8,4 +8,8 @@ public class FACTORYDAO {
 	public static ACTIVODAO getACTIVODAO() {
 		return new ACTIVODAOJDBC();
 	}
+	
+	public static DATOSCOMPRADAO getDATOSCOMPRADAO() {
+		return new DATOSCOMPRADAOJDBC();
+	}
 }

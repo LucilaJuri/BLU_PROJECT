@@ -12,7 +12,7 @@ import criptoWalletBLU.CLASES.Moneda;
 
 public class ACTIVODAOJDBC implements ACTIVODAO {
 
-	public int instertACTIVO(int idusuario, double cantidad, String nomenclatura) {
+	public int insertACTIVO(int idusuario, double cantidad, String nomenclatura) {
 		Connection coneccion = null;
 		try {
 			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
@@ -24,7 +24,9 @@ public class ACTIVODAOJDBC implements ACTIVODAO {
 					+ cantidad+", "
 					+"'"+nomenclatura+"');");
 			int result = st.executeUpdate(sql);
-			System.out.println("Operacion exitosa.");
+			System.out.println("INSERT exitoso.");
+			coneccion.close();
+			st.close();
 			return result;
 		}
 		catch(SQLException e) {
@@ -81,6 +83,24 @@ public class ACTIVODAOJDBC implements ACTIVODAO {
 		}
 		catch(SQLException e) {
 			System.out.println(e.getMessage());
+			return 0;
+		}
+	}
+	
+	public double selectCantidadNomenclatura(String nomenclatura) {
+		Connection coneccion = null;
+		try {
+			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
+			Statement st = coneccion.createStatement();
+			String sql = ("SELECT CANTIDAD FROM ACTIVOS WHERE NOMENCLATURA='"+nomenclatura+"';");
+			ResultSet result = st.executeQuery(sql);
+			double resultado=result.getDouble("CANTIDAD");
+			coneccion.close();
+			st.close();
+			return resultado;
+		}
+		catch(SQLException e) {
+			System.out.println("no se pudo conectar a la BD."+e.getMessage());
 			return 0;
 		}
 	}
