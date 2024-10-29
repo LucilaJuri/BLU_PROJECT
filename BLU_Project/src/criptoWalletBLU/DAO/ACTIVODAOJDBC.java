@@ -79,6 +79,28 @@ public class ACTIVODAOJDBC implements ACTIVODAO {
 		}
 	}
 	
+	public List<String> selectNomenclaturasCripto(int idusuario) {
+		Connection coneccion = null;
+		List<String> listaNomenclaturas = new ArrayList<String>();
+		try {
+			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
+			Statement st = coneccion.createStatement();
+			String sql = ("SELECT A.NOMENCLATURA FROM ACTIVOS A INNER JOIN STOCK S ON A.NOMENCLATURA=S.NOMENCLATURA WHERE A.IDUSUARIO="+idusuario+" AND S.TIPO='CRIPTO';");
+			ResultSet result = st.executeQuery(sql);
+			while(result.next()) {
+				listaNomenclaturas.add(result.getString("NOMENCLATURA"));
+			}
+			coneccion.close();
+			st.close();
+			return listaNomenclaturas;
+		}
+		catch(SQLException e) {
+			System.out.println("ERROR EN METODO: selectNomenclaturasCripto (clase ACTIVODAOJDBC)");
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
+	
 	public int updateCantidad(int idusuario, Moneda moneda) {
 		Connection coneccion = null;
 		try {

@@ -203,7 +203,6 @@ public class PruebasEntregable2 {
 		boolean validacion = false;
 		boolean existeCripto=false;
 		double cantidadComprada;
-		double precioCripto=0;
 		double cantidadEnStock=0;
 		double cantidadActivo=0;
 	
@@ -261,10 +260,10 @@ public class PruebasEntregable2 {
 		
 		Moneda criptoElegidaMoneda = new Moneda();
 		criptoElegidaMoneda.setNomenclatura(criptomonedaElegida);
-		precioCripto=(stockDao.selectPrecioNomenclatura(criptoElegidaMoneda));
+		criptoElegidaMoneda.setPrecio(stockDao.selectPrecioNomenclatura(criptoElegidaMoneda));
 		cantidadEnStock=(stockDao.selectCantidadNomenclatura(criptoElegidaMoneda));
 		
-		cantidadComprada=fiatElegidaMoneda.convertir(cantidadElegida, precioCripto);
+		cantidadComprada=fiatElegidaMoneda.convertir(cantidadElegida, criptoElegidaMoneda);
 		if (cantidadComprada>cantidadEnStock) {
 			System.out.println("ERROR: no hay STOCK suficiente de: "+criptomonedaElegida);
 			return;
@@ -291,6 +290,101 @@ public class PruebasEntregable2 {
 	}
 	
 	private static void simularSwap(Scanner in) {
+		STOCKDAO stockDao = FACTORYDAO.getSTOCKDAO();
+		ACTIVODAO activoDao = FACTORYDAO.getACTIVODAO();
+		List<String> listaCriptosActivos = new ArrayList<String>();
+		List<String> listaCriptos = new ArrayList<String>();
+		List<String> listaFiats = new ArrayList<String>();
+		List<Moneda> listaActivos = new ArrayList<Moneda>();
+		boolean validacion = false;
+		boolean existeCripto=false;
+		double cantidadEnStock=0;
+		double cantidadActivo=0;
+	
+		listaCriptosActivos = activoDao.selectNomenclaturasCripto(0);
 		
+		System.out.println("Ingrese CRIPTOMONEDA a convertir:");
+		System.out.println(listaCriptosActivos.toString());
+		String criptomonedaConvertir = in.next().toUpperCase();
+		while (!listaCriptosActivos.contains(criptomonedaConvertir)) {
+			System.out.println("ERROR: CRIPTOMONEDA no valida.");
+			System.out.println("Ingrese CRIPTOMONEDA a convertir:");
+			System.out.println(listaCriptosActivos.toString());
+			criptomonedaConvertir = in.next().toUpperCase();
+		}
+		
+		listaCriptos=stockDao.selectNomenclaturasCripto();
+		System.out.println("Ingrese CRIPTOMONEDA esperada:");
+		System.out.println(listaCriptos.toString());
+		String criptomonedaEsperada = in.next().toUpperCase();
+		while (!listaCriptos.contains(criptomonedaEsperada)) {
+			System.out.println("ERROR: CRIPTOMONEDA no valida.");
+			System.out.println("Ingrese CRIPTOMONEDA a esperada:");
+			System.out.println(listaCriptos.toString());
+			criptomonedaEsperada = in.next().toUpperCase();
+		}
+		
+		System.out.println("Ingrese cantidad de "+criptomonedaConvertir+" a convertir:");
+		double cantidadElegida = in.nextInt();
+		listaActivos=activoDao.selectACTIVOS(0);
+		for (Moneda activo : listaActivos) {
+			if(activo.getNomenclatura().equals(criptomonedaConvertir)) {
+				if(activo.getCantidad()>=cantidadElegida) {
+					cantidadActivo=activo.getCantidad();
+					validacion = true;
+					break;
+				}
+				System.out.println("ERROR: fondos insuficientes.");
+				return;
+			}
+		}
+		if (!validacion) {
+			System.out.println("ERROR: no posee esa CRIPTOMONEDA.");
+			return;
+		}
+		
+		for (Moneda activo : listaActivos) {
+			if(activo.getNomenclatura().equals(criptomonedaEsperada)) {
+				existeCripto=true;
+				break;
+			}
+		}
+		Moneda criptoConvertirMoneda = new Moneda();
+		criptoConvertirMoneda.setNomenclatura(criptomonedaConvertir);
+		criptoConvertirMoneda.setPrecio(stockDao.selectPrecioNomenclatura(criptoConvertirMoneda));
+		
+		Moneda criptoEsperadaMoneda = new Moneda();
+		criptoEsperadaMoneda.setNomenclatura(criptomonedaEsperada);
+		criptoEsperadaMoneda.setPrecio(stockDao.selectPrecioNomenclatura(criptoEsperadaMoneda));
+		double cantidadEsperadaStock=(stockDao.selectCantidadNomenclatura(criptoEsperadaMoneda));
+		double cantidadConvertirStock=(stockDao.selectCantidadNomenclatura(criptoConvertirMoneda));
+		
+		double cantidadConvertida=criptoConvertirMoneda.convertir(cantidadElegida, criptoEsperadaMoneda);
+		if (cantidadConvertida>cantidadEsperadaStock) {
+			System.out.println("ERROR: no hay STOCK suficiente de: "+criptomonedaEsperada);
+			return;
+		}
+		criptoEsperadaMoneda.setCantidad(cantidadEsperadaStock-cantidadConvertida);
+		stockDao.updateCantidad(criptoEsperadaMoneda);
+		
+		criptoConvertirMoneda.setCantidad(cantidadConvertirStock+cantidadElegida);
+		stockDao.updateCantidad(criptoConvertirMoneda);
+		
+		criptoConvertirMoneda.setCantidad(cantidadActivo-cantidadElegida);
+		activoDao.updateCantidad(0,criptoConvertirMoneda);
+		
+		if (existeCripto) {
+			double cantidadEsperada = activoDao.selectCantidadNomenclatura(criptoElegidaMoneda);
+			criptoElegidaMoneda.setCantidad(cantidadCriptomoneda+cantidadComprada);
+			activoDao.updateCantidad(0,criptoElegidaMoneda);
+		}
+		else {
+			criptoElegidaMoneda.setCantidad(cantidadComprada);
+			activoDao.insertACTIVO(0, criptoElegidaMoneda);
+		}
+		
+		OperacionCompra datosOperacion = new OperacionCompra(criptomonedaElegida,fiatElegida,cantidadComprada,cantidadElegida,Calendar.getInstance().getTime().toString());
+		DATOSCOMPRADAO compraDAO=FACTORYDAO.getDATOSCOMPRADAO();
+		compraDAO.insertDATOSCOMPRA(datosOperacion);
 	}
 }
