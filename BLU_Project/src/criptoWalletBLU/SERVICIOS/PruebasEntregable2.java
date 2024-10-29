@@ -374,13 +374,13 @@ public class PruebasEntregable2 {
 		activoDao.updateCantidad(0,criptoConvertirMoneda);
 		
 		if (existeCripto) {
-			double cantidadEsperada = activoDao.selectCantidadNomenclatura(criptoElegidaMoneda);
-			criptoElegidaMoneda.setCantidad(cantidadCriptomoneda+cantidadComprada);
-			activoDao.updateCantidad(0,criptoElegidaMoneda);
+			double cantidadEsperadaHay = activoDao.selectCantidadNomenclatura(criptoEsperadaMoneda);
+			criptoEsperadaMoneda.setCantidad(cantidadEsperadaHay+cantidadConvertida);
+			activoDao.updateCantidad(0,criptoEsperadaMoneda);
 		}
 		else {
-			criptoElegidaMoneda.setCantidad(cantidadComprada);
-			activoDao.insertACTIVO(0, criptoElegidaMoneda);
+			criptoEsperadaMoneda.setCantidad(cantidadConvertida);
+			activoDao.insertACTIVO(0, criptoEsperadaMoneda);
 		}
 		
 		OperacionCompra datosOperacion = new OperacionCompra(criptomonedaElegida,fiatElegida,cantidadComprada,cantidadElegida,Calendar.getInstance().getTime().toString());
