@@ -8,43 +8,55 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import criptoWalletBLU.CLASES.Moneda;
+
 
 public class STOCKDAOJDBC implements STOCKDAO {
 
-	public int insertSTOCK(String nomenclatura, double dolar, double stock, String nombre, String tipo) {
+	public int insertSTOCK(Moneda moneda, String tipo) {
 		Connection coneccion = null;
 		try {
 			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
 			Statement st = coneccion.createStatement();
 			String sql = (
-					"INSERT INTO STOCK (NOMENCLATURA, PRECIO, CANTIDAD, NOMBRE, TIPO)"
+					"INSERT INTO STOCK (NOMENCLATURA, PRECIO, CANTIDAD, NOMBRE, TIPO, VOLATILIDAD)"
 					+"VALUES (" 
-					+ "'"+nomenclatura+"'"+", "
-					+ dolar+", "
-					+ stock + ", "
-					+"'"+nombre+"', "
-					+"'"+tipo+"');");
+					+ "'"+moneda.getNomenclatura()+"'"+", "
+					+ moneda.getPrecio()+", "
+					+ moneda.getCantidad() + ", "
+					+"'"+moneda.getNombre()+"', "
+					+"'"+tipo+"', "
+					+moneda.getVolatilidad()+");");
 			int result = st.executeUpdate(sql);
-			System.out.println("Operacion exitosa.");
+			coneccion.close();
+			st.close();
 			return result;
 		}
 		catch(SQLException e) {
-			System.out.println("no se pudo conectar a la BD.");
+			System.out.println("ERROR EN METODO: insertSTOCK (clase STOCKDAOJDBC)");
+			System.out.println(e.getMessage());
 			return -1;
 		}
 	}
 
-	public ResultSet selectSTOCK() {
+	public List<Moneda> selectSTOCK() {
 		Connection coneccion = null;
+		List<Moneda> listaStock = new ArrayList<Moneda>();
 		try {
 			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
 			Statement st = coneccion.createStatement();
 			String sql = ("SELECT * FROM STOCK");
 			ResultSet result = st.executeQuery(sql);
-			return result;
+			while(result.next()) {
+				listaStock.add(new Moneda(result.getDouble("PRECIO"),result.getDouble("CANTIDAD") , result.getString("NOMBRE"), result.getString("NOMENCLATURA"), result.getDouble("VOLATILIDAD")));
+			}
+			coneccion.close();
+			st.close();
+			return listaStock;
 		}
 		catch(SQLException e) {
-			System.out.println("no se pudo conectar a la BD.");
+			System.out.println("ERROR EN METODO: selectSTOCK (clase STOCKDAOJDBC)");
+			System.out.println(e.getMessage());
 			return null;
 		}
 	}
@@ -56,41 +68,55 @@ public class STOCKDAOJDBC implements STOCKDAO {
 			Statement st = coneccion.createStatement();
 			String sql = ("SELECT COUNT(*) FROM STOCK");
 			int result = st.executeQuery(sql).getInt(1);
+			coneccion.close();
+			st.close();
 			return result;
 		}
 		catch(SQLException e) {
-			System.out.println("no se pudo conectar a la BD.");
-			return 0;
-		}
-	}
-
-	public int updateCantidad(String nomenclatura, double cantidad) {
-		Connection coneccion = null;
-		try {
-			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
-			Statement st = coneccion.createStatement();
-			String sql = ("UPDATE STOCK "+
-						"SET CANTIDAD = "+cantidad+
-						" WHERE NOMENCLATURA='"+nomenclatura+"';");
-			return st.executeUpdate(sql);
-		}
-		catch(SQLException e) {
+			System.out.println("ERROR EN METODO: contarSTOCK (clase STOCKDAOJDBC)");
 			System.out.println(e.getMessage());
 			return 0;
 		}
 	}
 
-	public ResultSet selectNomenclaturas() {
+	public int updateCantidad(Moneda moneda) {
 		Connection coneccion = null;
+		try {
+			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
+			Statement st = coneccion.createStatement();
+			String sql = ("UPDATE STOCK "+
+						"SET CANTIDAD = "+moneda.getCantidad()+
+						" WHERE NOMENCLATURA='"+moneda.getNomenclatura()+"';");
+			int result = st.executeUpdate(sql);
+			coneccion.close();
+			st.close();
+			return result;
+		}
+		catch(SQLException e) {
+			System.out.println("ERROR EN METODO: updateCantidad (clase STOCKDAOJDBC)");
+			System.out.println(e.getMessage());
+			return 0;
+		}
+	}
+
+	public List<String> selectNomenclaturas() {
+		Connection coneccion = null;
+		List<String> listaNomenclaturas = new ArrayList<String>();
 		try {
 			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
 			Statement st = coneccion.createStatement();
 			String sql = ("SELECT NOMENCLATURA FROM STOCK");
 			ResultSet result = st.executeQuery(sql);
-			return result;
+			while(result.next()) {
+				listaNomenclaturas.add(result.getString("NOMENCLATURA"));
+			}
+			coneccion.close();
+			st.close();
+			return listaNomenclaturas;
 		}
 		catch(SQLException e) {
-			System.out.println("no se pudo conectar a la BD."+e.getMessage());
+			System.out.println("ERROR EN METODO: selectNomenclaturas (clase STOCKDAOJDBC)");
+			System.out.println(e.getMessage());
 			return null;
 		}
 	}
@@ -110,10 +136,34 @@ public class STOCKDAOJDBC implements STOCKDAO {
 			return listaCriptos;
 		}
 		catch(SQLException e) {
-			System.out.println("no se pudo conectar a la BD."+e.getMessage());
+			System.out.println("ERROR EN METODO: selectNomenclaturasCripto (clase STOCKDAOJDBC)");
+			System.out.println(e.getMessage());
 			return null;
 		}
 	}
+	
+	public List<Moneda> selectSTOCKCripto() {
+		Connection coneccion = null;
+		List<Moneda> listaStock = new ArrayList<Moneda>();
+		try {
+			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
+			Statement st = coneccion.createStatement();
+			String sql = ("SELECT * FROM STOCK WHERE TIPO='CRIPTO'");
+			ResultSet result = st.executeQuery(sql);
+			while(result.next()) {
+				listaStock.add(new Moneda(result.getDouble("PRECIO"),result.getDouble("CANTIDAD") , result.getString("NOMBRE"), result.getString("NOMENCLATURA"), result.getDouble("VOLATILIDAD")));
+			}
+			coneccion.close();
+			st.close();
+			return listaStock;
+		}
+		catch(SQLException e) {
+			System.out.println("ERROR EN METODO: selectSTOCKCripto (clase STOCKDAOJDBC)");
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
+	
 	public List<String> selectNomenclaturasFiat() {
 		Connection coneccion = null;
 		List<String> listaFiats = new ArrayList<String>();
@@ -130,16 +180,17 @@ public class STOCKDAOJDBC implements STOCKDAO {
 			return listaFiats;
 		}
 		catch(SQLException e) {
-			System.out.println("no se pudo conectar a la BD."+e.getMessage());
+			System.out.println("ERROR EN METODO: selectNomenclaturasFiat (clase STOCKDAOJDBC)");
+			System.out.println(e.getMessage());
 			return null;
 		}
 	}
-	public double selectPrecioNomenclatura(String nomenclatura) {
+	public double selectPrecioNomenclatura(Moneda moneda) {
 		Connection coneccion = null;
 		try {
 			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
 			Statement st = coneccion.createStatement();
-			String sql = ("SELECT PRECIO FROM STOCK WHERE NOMENCLATURA='"+nomenclatura+"';");
+			String sql = ("SELECT PRECIO FROM STOCK WHERE NOMENCLATURA='"+moneda.getNomenclatura()+"';");
 			ResultSet result = st.executeQuery(sql);
 			double resultado=result.getDouble("PRECIO");
 			coneccion.close();
@@ -147,16 +198,17 @@ public class STOCKDAOJDBC implements STOCKDAO {
 			return resultado;
 		}
 		catch(SQLException e) {
-			System.out.println("no se pudo conectar a la BD."+e.getMessage());
+			System.out.println("ERROR EN METODO: selectPrecioNomenclatura (clase STOCKDAOJDBC)");
+			System.out.println(e.getMessage());
 			return 0;
 		}
 	}
-	public double selectCantidadNomenclatura(String nomenclatura) {
+	public double selectCantidadNomenclatura(Moneda moneda) {
 		Connection coneccion = null;
 		try {
 			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
 			Statement st = coneccion.createStatement();
-			String sql = ("SELECT CANTIDAD FROM STOCK WHERE NOMENCLATURA='"+nomenclatura+"';");
+			String sql = ("SELECT CANTIDAD FROM STOCK WHERE NOMENCLATURA='"+moneda.getNomenclatura()+"';");
 			ResultSet result = st.executeQuery(sql);
 			double resultado = result.getDouble("CANTIDAD");
 			coneccion.close();
@@ -164,7 +216,8 @@ public class STOCKDAOJDBC implements STOCKDAO {
 			return resultado;
 		}
 		catch(SQLException e) {
-			System.out.println("no se pudo conectar a la BD."+e.getMessage());
+			System.out.println("ERROR EN METODO: selectCantidadNomenclatura (clase STOCKDAOJDBC)");
+			System.out.println(e.getMessage());
 			return 0;
 		}
 	}

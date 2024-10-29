@@ -12,7 +12,7 @@ import criptoWalletBLU.CLASES.Moneda;
 
 public class ACTIVODAOJDBC implements ACTIVODAO {
 
-	public int insertACTIVO(int idusuario, double cantidad, String nomenclatura) {
+	public int insertACTIVO(int idusuario, Moneda moneda) {
 		Connection coneccion = null;
 		try {
 			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
@@ -21,16 +21,16 @@ public class ACTIVODAOJDBC implements ACTIVODAO {
 					"INSERT INTO ACTIVOS (IDUSUARIO, CANTIDAD, NOMENCLATURA)"
 					+"VALUES (" 
 					+ idusuario+", "
-					+ cantidad+", "
-					+"'"+nomenclatura+"');");
+					+ moneda.getCantidad()+", "
+					+"'"+moneda.getNomenclatura()+"');");
 			int result = st.executeUpdate(sql);
-			System.out.println("INSERT exitoso.");
 			coneccion.close();
 			st.close();
 			return result;
 		}
 		catch(SQLException e) {
-			System.out.println("no se pudo conectar a la BD.");
+			System.out.println("ERROR EN METODO: insertACTIVO (clase ACTIVODAOJDBC)");
+			System.out.println(e.getMessage());
 			return -1;
 		}
 	}
@@ -51,48 +51,60 @@ public class ACTIVODAOJDBC implements ACTIVODAO {
 			return listaActivos;
 		}
 		catch(SQLException e) {
-			System.out.println("no se pudo conectar a la BD.");
+			System.out.println("ERROR EN METODO: selectACTIVOS (clase ACTIVODAOJDBC)");
+			System.out.println(e.getMessage());
 			return null;
 		}
 	}
 	
-	public ResultSet selectNomenclaturas(int idusuario) {
+	public List<String> selectNomenclaturas(int idusuario) {
 		Connection coneccion = null;
+		List<String> listaNomenclaturas = new ArrayList<String>();
 		try {
 			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
 			Statement st = coneccion.createStatement();
-			String sql = ("SELECT NOMENCLATURA, CANTIDAD FROM ACTIVOS WHERE IDUSUARIO="+idusuario+";");
+			String sql = ("SELECT NOMENCLATURA FROM ACTIVOS WHERE IDUSUARIO="+idusuario+";");
 			ResultSet result = st.executeQuery(sql);
-			return result;
+			while(result.next()) {
+				listaNomenclaturas.add(result.getString("NOMENCLATURA"));
+			}
+			coneccion.close();
+			st.close();
+			return listaNomenclaturas;
 		}
 		catch(SQLException e) {
-			System.out.println("no se pudo conectar a la BD."+e.getMessage());
+			System.out.println("ERROR EN METODO: selectNomenclaturas (clase ACTIVODAOJDBC)");
+			System.out.println(e.getMessage());
 			return null;
 		}
 	}
 	
-	public int updateCantidad(String nomenclatura, double cantidad, int idusuario) {
+	public int updateCantidad(int idusuario, Moneda moneda) {
 		Connection coneccion = null;
 		try {
 			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
 			Statement st = coneccion.createStatement();
 			String sql = ("UPDATE ACTIVOS "+
-						"SET CANTIDAD = "+cantidad+
-						" WHERE NOMENCLATURA='"+nomenclatura+"' AND IDUSUARIO = "+idusuario+";");
-			return st.executeUpdate(sql);
+						"SET CANTIDAD = "+moneda.getCantidad()+
+						" WHERE NOMENCLATURA='"+moneda.getNomenclatura()+"' AND IDUSUARIO = "+idusuario+";");
+			int resultado = st.executeUpdate(sql);
+			coneccion.close();
+			st.close();
+			return resultado;
 		}
 		catch(SQLException e) {
+			System.out.println("ERROR EN METODO: updateCantidad (clase ACTIVODAOJDBC)");
 			System.out.println(e.getMessage());
-			return 0;
+			return -1;
 		}
 	}
 	
-	public double selectCantidadNomenclatura(String nomenclatura) {
+	public double selectCantidadNomenclatura(Moneda moneda) {
 		Connection coneccion = null;
 		try {
 			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
 			Statement st = coneccion.createStatement();
-			String sql = ("SELECT CANTIDAD FROM ACTIVOS WHERE NOMENCLATURA='"+nomenclatura+"';");
+			String sql = ("SELECT CANTIDAD FROM ACTIVOS WHERE NOMENCLATURA='"+moneda.getNomenclatura()+"';");
 			ResultSet result = st.executeQuery(sql);
 			double resultado=result.getDouble("CANTIDAD");
 			coneccion.close();
@@ -100,8 +112,9 @@ public class ACTIVODAOJDBC implements ACTIVODAO {
 			return resultado;
 		}
 		catch(SQLException e) {
-			System.out.println("no se pudo conectar a la BD."+e.getMessage());
-			return 0;
+			System.out.println("ERROR EN METODO: selectCantidadNomenclatura (clase ACTIVODAOJDBC)");
+			System.out.println(e.getMessage());
+			return -1;
 		}
 	}
 

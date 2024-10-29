@@ -23,12 +23,12 @@ public class DATOSCOMPRADAOJDBC implements DATOSCOMPRADAO {
 				    datosCompra.getFecha()+"');"
 				);
 			int result = st.executeUpdate(sql);
-			System.out.println("INSERT exitoso.");
 			coneccion.close();
 			st.close();
 			return result;
 		}
 		catch(SQLException e) {
+			System.out.println("ERROR EN METODO: insertDATOSCOMPRA (clase DATOSCOMPRADAOJDBC)");
 			System.out.println(e.getMessage());
 			return -1;
 		}

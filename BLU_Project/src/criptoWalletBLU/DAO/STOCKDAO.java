@@ -1,24 +1,27 @@
 package criptoWalletBLU.DAO;
 
-import java.sql.ResultSet;
 import java.util.List;
 
+import criptoWalletBLU.CLASES.Moneda;
+
 public interface STOCKDAO {
-	public int insertSTOCK(String nomenclatura, double dolar, double stock, String nombre, String tipo);
+	public int insertSTOCK(Moneda moneda, String tipo);
 	
-	public ResultSet selectSTOCK();
+	public List<Moneda> selectSTOCK();
 	
 	public int contarSTOCK();
 	
-	public int updateCantidad(String nomenclatura, double cantidad);
+	public int updateCantidad(Moneda moneda);
 	
-	public ResultSet selectNomenclaturas();
+	public List<String> selectNomenclaturas();
 	
 	public List<String> selectNomenclaturasCripto();
 	
 	public List<String> selectNomenclaturasFiat();
 	
-	public double selectPrecioNomenclatura(String nomenclatura);
+	public double selectPrecioNomenclatura(Moneda moneda);
 	
-	public double selectCantidadNomenclatura(String nomenclatura);
+	public double selectCantidadNomenclatura(Moneda moneda);
+	
+	public List<Moneda> selectSTOCKCripto();
 }
