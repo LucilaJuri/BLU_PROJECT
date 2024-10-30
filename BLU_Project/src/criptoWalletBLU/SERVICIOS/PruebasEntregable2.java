@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import criptoWalletBLU.CLASES.Moneda;
 import criptoWalletBLU.CLASES.OperacionCompra;
+import criptoWalletBLU.CLASES.OperacionSwap;
 import criptoWalletBLU.COMPARATORS.*;
 import criptoWalletBLU.DAO.*;
 
@@ -38,8 +39,7 @@ public class PruebasEntregable2 {
 			case 7 : simularCompra(in);break;
 			case 8 : simularSwap(in);break;
 			case 9 : break;
-			default: System.out.println("ERROR: OPCION NO VALIDA, INTENTE NUEVAMENTE.");
-			}
+			default: System.out.println("ERROR: OPCION NO VALIDA, INTENTE NUEVAMENTE.");}
 			System.out.println();
 			System.out.println("INGRESE TAREA A REALIZAR");
 			System.out.println("1) Crear MONEDA.");
@@ -54,7 +54,7 @@ public class PruebasEntregable2 {
 			eleccion = in.nextInt();
 		}
 		System.out.println();
-		System.out.println("MUCHAS GRACIAS.");System.out.println("ATTE: BLU PROJECT INC.");
+		System.out.println("MUCHAS GRACIAS.");System.out.println("ATTE: BLU PROJECT INC. SA.");
 		
 		
 	}
@@ -94,7 +94,7 @@ public class PruebasEntregable2 {
 		}
 		if (confirmar.equals("Y")) {
 			Moneda moneda = new Moneda(precio, cantidad, nombre, nomenclatura, volatilidad);
-			STOCKDAO stockDao = FACTORYDAO.getSTOCKDAO();
+			StockDao stockDao = FactoryDao.getStockDao();
 			stockDao.insertSTOCK(moneda, tipo);
 		}
 		else System.out.println("Operacion cancelada.");
@@ -108,7 +108,7 @@ public class PruebasEntregable2 {
 			System.out.println("Ingrese criterio de ordenacion (VALOR/NOMENCLATURA)");
 			i = in.next().toUpperCase();
 		}
-		STOCKDAO stockDao = FACTORYDAO.getSTOCKDAO();
+		StockDao stockDao = FactoryDao.getStockDao();
 		List<Moneda> listaStock = stockDao.selectSTOCK();
 		if (i.equals("VALOR"))listaStock.sort(new ComparadorValor());
 		else listaStock.sort(new ComparadorNomenclatura());
@@ -123,7 +123,7 @@ public class PruebasEntregable2 {
 			System.out.println("Ingrese criterio de ordenacion (CANTIDAD/NOMENCLATURA)");
 			i = in.next().toUpperCase();
 		}
-		STOCKDAO stockDao = FACTORYDAO.getSTOCKDAO();
+		StockDao stockDao = FactoryDao.getStockDao();
 		List<Moneda> listaStock = stockDao.selectSTOCKCripto();
 		if (i.equals("CANTIDAD"))listaStock.sort(new ComparadorCantidad());
 		else listaStock.sort(new ComparadorNomenclatura());
@@ -131,7 +131,7 @@ public class PruebasEntregable2 {
 	}
 	
 	public static void generarStock() {
-		STOCKDAO stockDao = FACTORYDAO.getSTOCKDAO();
+		StockDao stockDao = FactoryDao.getStockDao();
 		List<String> listaNomenclaturas = stockDao.selectNomenclaturasCripto();
 		Moneda moneda=new Moneda();
 		for (String nomenclatura : listaNomenclaturas) {
@@ -142,8 +142,8 @@ public class PruebasEntregable2 {
 	}
 	
 	public static int crearActivo(Scanner in) {
-		STOCKDAO stockDao = FACTORYDAO.getSTOCKDAO();
-		ACTIVODAO activoDao = FACTORYDAO.getACTIVODAO();
+		StockDao stockDao = FactoryDao.getStockDao();
+		ActivoDao activoDao = FactoryDao.getActivoDao();
 		List<String> listaStock = stockDao.selectNomenclaturas();
 		List<String> listaActivos = activoDao.selectNomenclaturas(0);
 		List<String> listaInterseccion = new ArrayList<String>();
@@ -187,7 +187,7 @@ public class PruebasEntregable2 {
 			System.out.println("Ingrese criterio de ordenacion (CANTIDAD/NOMENCLATURA)");
 			i = in.next().toUpperCase();
 		}
-		ACTIVODAO activoDao = FACTORYDAO.getACTIVODAO();
+		ActivoDao activoDao = FactoryDao.getActivoDao();
 		List<Moneda> listaActivos = activoDao.selectACTIVOS(0);
 		if (i.equals("CANTIDAD"))listaActivos.sort(new ComparadorCantidad());
 		else listaActivos.sort(new ComparadorNomenclatura());
@@ -195,8 +195,8 @@ public class PruebasEntregable2 {
 	}
 	
 	private static void simularCompra(Scanner in) {
-		STOCKDAO stockDao = FACTORYDAO.getSTOCKDAO();
-		ACTIVODAO activoDao = FACTORYDAO.getACTIVODAO();
+		StockDao stockDao = FactoryDao.getStockDao();
+		ActivoDao activoDao = FactoryDao.getActivoDao();
 		List<String> listaCriptos = new ArrayList<String>();
 		List<String> listaFiats = new ArrayList<String>();
 		List<Moneda> listaActivos = new ArrayList<Moneda>();
@@ -285,20 +285,18 @@ public class PruebasEntregable2 {
 		}
 		
 		OperacionCompra datosOperacion = new OperacionCompra(criptomonedaElegida,fiatElegida,cantidadComprada,cantidadElegida,Calendar.getInstance().getTime().toString());
-		DATOSCOMPRADAO compraDAO=FACTORYDAO.getDATOSCOMPRADAO();
+		DatosCompraDao compraDAO=FactoryDao.getDatosCompraDao();
 		compraDAO.insertDATOSCOMPRA(datosOperacion);
 	}
 	
 	private static void simularSwap(Scanner in) {
-		STOCKDAO stockDao = FACTORYDAO.getSTOCKDAO();
-		ACTIVODAO activoDao = FACTORYDAO.getACTIVODAO();
+		StockDao stockDao = FactoryDao.getStockDao();
+		ActivoDao activoDao = FactoryDao.getActivoDao();
 		List<String> listaCriptosActivos = new ArrayList<String>();
 		List<String> listaCriptos = new ArrayList<String>();
-		List<String> listaFiats = new ArrayList<String>();
 		List<Moneda> listaActivos = new ArrayList<Moneda>();
 		boolean validacion = false;
 		boolean existeCripto=false;
-		double cantidadEnStock=0;
 		double cantidadActivo=0;
 	
 		listaCriptosActivos = activoDao.selectNomenclaturasCripto(0);
@@ -352,12 +350,12 @@ public class PruebasEntregable2 {
 		Moneda criptoConvertirMoneda = new Moneda();
 		criptoConvertirMoneda.setNomenclatura(criptomonedaConvertir);
 		criptoConvertirMoneda.setPrecio(stockDao.selectPrecioNomenclatura(criptoConvertirMoneda));
+		double cantidadConvertirStock=(stockDao.selectCantidadNomenclatura(criptoConvertirMoneda));
 		
 		Moneda criptoEsperadaMoneda = new Moneda();
 		criptoEsperadaMoneda.setNomenclatura(criptomonedaEsperada);
 		criptoEsperadaMoneda.setPrecio(stockDao.selectPrecioNomenclatura(criptoEsperadaMoneda));
 		double cantidadEsperadaStock=(stockDao.selectCantidadNomenclatura(criptoEsperadaMoneda));
-		double cantidadConvertirStock=(stockDao.selectCantidadNomenclatura(criptoConvertirMoneda));
 		
 		double cantidadConvertida=criptoConvertirMoneda.convertir(cantidadElegida, criptoEsperadaMoneda);
 		if (cantidadConvertida>cantidadEsperadaStock) {
@@ -383,8 +381,8 @@ public class PruebasEntregable2 {
 			activoDao.insertACTIVO(0, criptoEsperadaMoneda);
 		}
 		
-		OperacionCompra datosOperacion = new OperacionCompra(criptomonedaElegida,fiatElegida,cantidadComprada,cantidadElegida,Calendar.getInstance().getTime().toString());
-		DATOSCOMPRADAO compraDAO=FACTORYDAO.getDATOSCOMPRADAO();
-		compraDAO.insertDATOSCOMPRA(datosOperacion);
+		OperacionSwap datosOperacion = new OperacionSwap(criptomonedaConvertir,criptomonedaEsperada,cantidadElegida,cantidadConvertida,Calendar.getInstance().getTime().toString());
+		DatosSwapDao swapDAO=FactoryDao.getDatosSwapDao();
+		swapDAO.insertDATOSSWAP(datosOperacion);
 	}
 }

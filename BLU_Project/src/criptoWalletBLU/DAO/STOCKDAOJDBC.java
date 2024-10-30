@@ -11,7 +11,7 @@ import java.util.List;
 import criptoWalletBLU.CLASES.Moneda;
 
 
-public class STOCKDAOJDBC implements STOCKDAO {
+public class STOCKDAOJDBC implements StockDao {
 
 	public int insertSTOCK(Moneda moneda, String tipo) {
 		Connection coneccion = null;

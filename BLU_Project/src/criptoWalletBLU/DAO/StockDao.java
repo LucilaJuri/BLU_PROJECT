@@ -4,7 +4,7 @@ import java.util.List;
 
 import criptoWalletBLU.CLASES.Moneda;
 
-public interface STOCKDAO {
+public interface StockDao {
 	public int insertSTOCK(Moneda moneda, String tipo);
 	
 	public List<Moneda> selectSTOCK();

@@ -4,7 +4,7 @@ import java.util.List;
 
 import criptoWalletBLU.CLASES.Moneda;
 
-public interface ACTIVODAO {
+public interface ActivoDao {
 	public int insertACTIVO(int idusuario, Moneda moneda);
 	
 	public List<Moneda> selectACTIVOS(int idusuario);

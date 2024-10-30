@@ -2,7 +2,7 @@ package criptoWalletBLU.DAO;
 
 import criptoWalletBLU.CLASES.OperacionCompra;
 
-public interface DATOSCOMPRADAO {
+public interface DatosCompraDao {
 	
 	public int insertDATOSCOMPRA(OperacionCompra datosCompra);
 }

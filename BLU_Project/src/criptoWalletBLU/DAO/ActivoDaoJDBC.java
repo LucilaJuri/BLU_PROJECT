@@ -10,7 +10,7 @@ import java.util.List;
 
 import criptoWalletBLU.CLASES.Moneda;
 
-public class ACTIVODAOJDBC implements ACTIVODAO {
+public class ActivoDaoJDBC implements ActivoDao {
 
 	public int insertACTIVO(int idusuario, Moneda moneda) {
 		Connection coneccion = null;

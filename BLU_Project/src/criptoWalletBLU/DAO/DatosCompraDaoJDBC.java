@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 import criptoWalletBLU.CLASES.OperacionCompra;
 
-public class DATOSCOMPRADAOJDBC implements DATOSCOMPRADAO {
+public class DatosCompraDaoJDBC implements DatosCompraDao {
 
 	public int insertDATOSCOMPRA(OperacionCompra datosCompra) {
 		Connection coneccion = null;
