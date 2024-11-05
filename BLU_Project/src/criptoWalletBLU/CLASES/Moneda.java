@@ -73,10 +73,10 @@ public class Moneda {
 		this.nomenclatura = nomenclatura;
 	}
 	
-	public double convertir(double cantidad, double precioOtro) {
+	public double convertir(double cantidad, Moneda moneda) {
 		
 		double cantidadDolares=cantidad*this.precio;
-		double cantidadOtro=cantidadDolares/precioOtro;
+		double cantidadOtro=cantidadDolares/moneda.getPrecio();
 		return cantidadOtro;
 	}
 }

@@ -1,0 +1,11 @@
+UML:
+	- Asociamos al Usuario informacion adicional referida a las altas y bajas (info registracion, info baja, fecha alta, fecha baja) y el tipo 2FA seleccionado.
+	- Reemplazamos las apariciones de datos de tipo String que se referían a datos de tipo Criptomoneda o Protocolo por sus respectivas Clases (Monedas y Protocolo en las operaciones, Criptomoneda en Protocolo).
+	- Creamos las clases Criptomoneda y Fiat para diferenciar estos tipos de monedas y en el futuro darles un tratamiento particular (por ejemplo el Swap es solo de Criptos).
+	- Operacion tiene los datos ("reporte") de cada transaccion, mientras que Transaccion es un gestor de operaciones (compra, venta, swap, etc).
+
+Diagrama de secuencia:
+	- El inicio ahora esta dado por un metodo que recibe por parametro los datos ingresados por el usuario. Ya no hay respuesta del estado de la compra.
+	- Arreglamos la sintaxos de la sentencia new.
+	- Consideramos que es necesario que Stock se llame a si mismo dado que sería un metodo interno que actualice sus datos dados los datos de la compra.
+	- El actualizarTransaccion recibe los datos de la compra lo que le permite identificar el tipo de Transaccion.
