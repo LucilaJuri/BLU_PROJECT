@@ -4,5 +4,7 @@ import criptoWalletBLU.CLASES.OperacionCompra;
 
 public interface DatosCompraDao {
 	
-	public int insertDATOSCOMPRA(OperacionCompra datosCompra);
+	public int crearTablaDatosCompra();
+	
+	public int insertDatosCompra(OperacionCompra datosCompra);
 }

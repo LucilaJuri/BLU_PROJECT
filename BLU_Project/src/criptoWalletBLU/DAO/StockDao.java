@@ -5,11 +5,14 @@ import java.util.List;
 import criptoWalletBLU.CLASES.Moneda;
 
 public interface StockDao {
-	public int insertSTOCK(Moneda moneda, String tipo);
 	
-	public List<Moneda> selectSTOCK();
+	public int crearTablaStock();
 	
-	public int contarSTOCK();
+	public int insertStock(Moneda moneda, String tipo);
+	
+	public List<Moneda> selectStock();
+	
+	public int contarStock();
 	
 	public int updateCantidad(Moneda moneda);
 	
@@ -23,5 +26,5 @@ public interface StockDao {
 	
 	public double selectCantidadNomenclatura(Moneda moneda);
 	
-	public List<Moneda> selectSTOCKCripto();
+	public List<Moneda> selectStockCripto();
 }

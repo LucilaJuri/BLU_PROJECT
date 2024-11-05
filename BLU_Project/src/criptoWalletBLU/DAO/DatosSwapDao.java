@@ -4,6 +4,8 @@ import criptoWalletBLU.CLASES.OperacionSwap;
 
 public interface DatosSwapDao {
 	
-	public int insertDATOSSWAP(OperacionSwap datosSwap);
+	public int crearTablaDatosSwap();
+	
+	public int insertDatosSwap(OperacionSwap datosSwap);
 
 }

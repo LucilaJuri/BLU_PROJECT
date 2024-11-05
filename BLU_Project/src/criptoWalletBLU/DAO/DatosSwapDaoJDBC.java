@@ -8,7 +8,35 @@ import java.sql.Statement;
 import criptoWalletBLU.CLASES.OperacionSwap;
 
 public class DatosSwapDaoJDBC implements DatosSwapDao{
-	public int insertDATOSSWAP(OperacionSwap datosSwap) {
+	
+	public int crearTablaDatosSwap() {
+		Connection coneccion = null;
+		try {
+			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
+			Statement st = coneccion.createStatement();
+			String sql = (
+					"CREATE TABLE IF NOT EXISTS\"DATOSSWAP\" (\r\n"
+					+ "	\"IDSWAP\"	INTEGER,\r\n"
+					+ "	\"CRIPTOORG\"	TEXT NOT NULL,\r\n"
+					+ "	\"CRIPTODEST\"	TEXT NOT NULL,\r\n"
+					+ "	\"CANTCRIPTOORG\"	REAL NOT NULL,\r\n"
+					+ "	\"CANTCRIPTODEST\"	REAL NOT NULL,\r\n"
+					+ "	\"FECHA\"	TEXT NOT NULL,\r\n"
+					+ "	PRIMARY KEY(\"IDSWAP\" AUTOINCREMENT)\r\n"
+					+ ");");
+			int result = st.executeUpdate(sql);
+			coneccion.close();
+			st.close();
+			return result;
+		}
+		catch(SQLException e) {
+			System.out.println("ERROR EN METODO: crearTablaDatosSwap (clase crearTablaDatosSwap)");
+			System.out.println(e.getMessage());
+			return -1;
+		}
+	}
+	
+	public int insertDatosSwap(OperacionSwap datosSwap) {
 		Connection coneccion = null;
 		try {
 			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
@@ -27,7 +55,7 @@ public class DatosSwapDaoJDBC implements DatosSwapDao{
 			return result;
 		}
 		catch(SQLException e) {
-			System.out.println("ERROR EN METODO: insertDATOSSWAP (clase DatosSwapDaoJDBC)");
+			System.out.println("ERROR EN METODO: insertDatosSwap (clase DatosSwapDaoJDBC)");
 			System.out.println(e.getMessage());
 			return -1;
 		}

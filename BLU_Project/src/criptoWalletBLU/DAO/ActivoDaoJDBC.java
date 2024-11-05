@@ -11,8 +11,34 @@ import java.util.List;
 import criptoWalletBLU.CLASES.Moneda;
 
 public class ActivoDaoJDBC implements ActivoDao {
+	
+	public int crearTablaActivos() {
+		Connection coneccion = null;
+		try {
+			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
+			Statement st = coneccion.createStatement();
+			String sql = (
+					"CREATE TABLE IF NOT EXISTS \"ACTIVOS\" (\r\n"
+					+ "	\"DIRECCION\"	INTEGER UNIQUE,\r\n"
+					+ "	\"IDUSUARIO\"	INTEGER NOT NULL,\r\n"
+					+ "	\"CANTIDAD\"	REAL NOT NULL,\r\n"
+					+ "	\"NOMENCLATURA\"	TEXT NOT NULL UNIQUE,\r\n"
+					+ "	PRIMARY KEY(\"DIRECCION\" AUTOINCREMENT)\r\n"
+					+ ");");
+			int result = st.executeUpdate(sql);
+			coneccion.close();
+			st.close();
+			return result;
+		}
+		catch(SQLException e) {
+			System.out.println("ERROR EN METODO: crearTablaActivos (clase ActivoDaoJDBC)");
+			System.out.println(e.getMessage());
+			return -1;
+		}
+	}
+	
 
-	public int insertACTIVO(int idusuario, Moneda moneda) {
+	public int insertActivo(int idusuario, Moneda moneda) {
 		Connection coneccion = null;
 		try {
 			coneccion=DriverManager.getConnection("jdbc:sqlite:BLUDATABASE.db");
@@ -29,13 +55,13 @@ public class ActivoDaoJDBC implements ActivoDao {
 			return result;
 		}
 		catch(SQLException e) {
-			System.out.println("ERROR EN METODO: insertACTIVO (clase ACTIVODAOJDBC)");
+			System.out.println("ERROR EN METODO: insertACTIVO (clase ActivoDaoJDBC)");
 			System.out.println(e.getMessage());
 			return -1;
 		}
 	}
 	
-	public List<Moneda> selectACTIVOS(int idusuario) {
+	public List<Moneda> selectActivos(int idusuario) {
 		Connection coneccion = null;
 		List<Moneda> listaActivos = new ArrayList<Moneda>();
 		try {
@@ -51,7 +77,7 @@ public class ActivoDaoJDBC implements ActivoDao {
 			return listaActivos;
 		}
 		catch(SQLException e) {
-			System.out.println("ERROR EN METODO: selectACTIVOS (clase ACTIVODAOJDBC)");
+			System.out.println("ERROR EN METODO: selectACTIVOS (clase ActivoDaoJDBC)");
 			System.out.println(e.getMessage());
 			return null;
 		}
@@ -73,7 +99,7 @@ public class ActivoDaoJDBC implements ActivoDao {
 			return listaNomenclaturas;
 		}
 		catch(SQLException e) {
-			System.out.println("ERROR EN METODO: selectNomenclaturas (clase ACTIVODAOJDBC)");
+			System.out.println("ERROR EN METODO: selectNomenclaturas (clase ActivoDaoJDBC)");
 			System.out.println(e.getMessage());
 			return null;
 		}
@@ -95,7 +121,7 @@ public class ActivoDaoJDBC implements ActivoDao {
 			return listaNomenclaturas;
 		}
 		catch(SQLException e) {
-			System.out.println("ERROR EN METODO: selectNomenclaturasCripto (clase ACTIVODAOJDBC)");
+			System.out.println("ERROR EN METODO: selectNomenclaturasCripto (clase ActivoDaoJDBC)");
 			System.out.println(e.getMessage());
 			return null;
 		}
@@ -115,7 +141,7 @@ public class ActivoDaoJDBC implements ActivoDao {
 			return resultado;
 		}
 		catch(SQLException e) {
-			System.out.println("ERROR EN METODO: updateCantidad (clase ACTIVODAOJDBC)");
+			System.out.println("ERROR EN METODO: updateCantidad (clase ActivoDaoJDBC)");
 			System.out.println(e.getMessage());
 			return -1;
 		}
@@ -134,7 +160,7 @@ public class ActivoDaoJDBC implements ActivoDao {
 			return resultado;
 		}
 		catch(SQLException e) {
-			System.out.println("ERROR EN METODO: selectCantidadNomenclatura (clase ACTIVODAOJDBC)");
+			System.out.println("ERROR EN METODO: selectCantidadNomenclatura (clase ActivoDaoJDBC)");
 			System.out.println(e.getMessage());
 			return -1;
 		}

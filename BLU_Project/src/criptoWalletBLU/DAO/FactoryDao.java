@@ -2,7 +2,7 @@ package criptoWalletBLU.DAO;
 
 public class FactoryDao {
 	public static StockDao getStockDao() {
-		return new STOCKDAOJDBC();
+		return new StockDaoJDBC();
 	}
 	
 	public static ActivoDao getActivoDao() {
