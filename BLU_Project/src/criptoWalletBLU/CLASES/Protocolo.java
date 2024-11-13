@@ -9,9 +9,11 @@ public class Protocolo {
 	private String tipoCripto;
 	private double intereses;
 	private double comision;
-	private Fecha fechaFin;			/** @see Fecha */ 		
+	private Fecha fechaFin;
+
+	/** @see Fecha */
 	/** si es null el protocolo no tiene fecha limite */
-	
+
 	public Protocolo(String nombreProtocolo, String tipoCripto, double intereses, double comision, Fecha fechaFin) {
 		this.nombreProtocolo = nombreProtocolo;
 		this.tipoCripto = tipoCripto;
@@ -59,5 +61,5 @@ public class Protocolo {
 	public void setFechaFin(Fecha fechaFin) {
 		this.fechaFin = fechaFin;
 	}
-	
+
 }

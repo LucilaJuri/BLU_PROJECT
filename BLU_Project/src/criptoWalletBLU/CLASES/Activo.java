@@ -5,9 +5,11 @@
 package criptoWalletBLU.CLASES;
 
 public class Activo {
-	private String direccion; 
-	private Moneda moneda;		/** @see Moneda */
-	
+	private String direccion;
+	private Moneda moneda;
+
+	/** @see Moneda */
+
 	public Activo(String direccion, Moneda moneda) {
 		this.direccion = direccion;
 		this.moneda = moneda;
@@ -28,5 +30,5 @@ public class Activo {
 	public void setMoneda(Moneda moneda) {
 		this.moneda = moneda;
 	}
-	
+
 }

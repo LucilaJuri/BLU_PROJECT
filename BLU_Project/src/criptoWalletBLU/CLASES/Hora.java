@@ -6,12 +6,13 @@ package criptoWalletBLU.CLASES;
 
 public class Hora {
 	/**
-	 * Esta clase será utilizada en la clase Operacion para guardar el momento exacto en que se realizó una operación
+	 * Esta clase será utilizada en la clase Operacion para guardar el momento
+	 * exacto en que se realizó una operación
 	 */
 	private int hora;
 	private int minuto;
 	private int segundo;
-	
+
 	public Hora(int hora, int minuto, int segundo) {
 		this.hora = hora;
 		this.minuto = minuto;

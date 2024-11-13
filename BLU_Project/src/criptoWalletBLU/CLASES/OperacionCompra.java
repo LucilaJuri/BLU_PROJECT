@@ -6,7 +6,7 @@ public class OperacionCompra {
 	private double cantCripto;
 	private double cantFiat;
 	private String fecha;
-	
+
 	public String getCripto() {
 		return cripto;
 	}
@@ -38,7 +38,6 @@ public class OperacionCompra {
 	public void setCantFiat(double cantFiat) {
 		this.cantFiat = cantFiat;
 	}
-
 
 	public OperacionCompra(String cripto, String fiat, double cantCripto, double cantFiat, String fecha) {
 		this.cripto = cripto;

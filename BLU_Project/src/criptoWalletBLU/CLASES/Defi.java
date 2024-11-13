@@ -5,10 +5,14 @@
 package criptoWalletBLU.CLASES;
 
 public class Defi {
-	private Moneda moneda;			/** @see Moneda */
-	private Fecha fechaInicio;		/** @see Fecha */
-	private Protocolo protocolo;	/** @see Protocolo */
-	
+	private Moneda moneda;
+	/** @see Moneda */
+	private Fecha fechaInicio;
+	/** @see Fecha */
+	private Protocolo protocolo;
+
+	/** @see Protocolo */
+
 	public Defi(Moneda moneda, Fecha fechaInicio, Protocolo protocolo) {
 		this.moneda = moneda;
 		this.fechaInicio = fechaInicio;
@@ -38,6 +42,5 @@ public class Defi {
 	public void setProtocolo(Protocolo protocolo) {
 		this.protocolo = protocolo;
 	}
-	
-	
+
 }

@@ -5,9 +5,10 @@
 package criptoWalletBLU.CLASES;
 
 public class CuentaBancaria {
-	private Persona titular; /** @see Persona */
+	private Persona titular;
+	/** @see Persona */
 	private int cvu;
-	
+
 	public CuentaBancaria(Persona titular, int cvu) {
 		this.titular = titular;
 		this.cvu = cvu;
@@ -28,6 +29,5 @@ public class CuentaBancaria {
 	public void setCvu(int cvu) {
 		this.cvu = cvu;
 	}
-	
-	
+
 }
