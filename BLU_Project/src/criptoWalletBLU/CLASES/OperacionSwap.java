@@ -1,6 +1,7 @@
 package criptoWalletBLU.CLASES;
 
 public class OperacionSwap {
+	private int idUsuario;
 	private String criptoOrigen;
 	private String criptoDestino;
 	private double cantCriptoOrigen;
@@ -47,13 +48,22 @@ public class OperacionSwap {
 		this.fecha = fecha;
 	}
 
-	public OperacionSwap(String criptoOrigen, String criptoDestino, double cantCriptoOrigen, double cantCriptoDestino,
+	public OperacionSwap(int idUsuario, String criptoOrigen, String criptoDestino, double cantCriptoOrigen, double cantCriptoDestino,
 			String fecha) {
+		this.idUsuario=idUsuario;
 		this.criptoOrigen = criptoOrigen;
 		this.criptoDestino = criptoDestino;
 		this.cantCriptoOrigen = cantCriptoOrigen;
 		this.cantCriptoDestino = cantCriptoDestino;
 		this.fecha = fecha;
+	}
+
+	public int getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(int idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 
 }

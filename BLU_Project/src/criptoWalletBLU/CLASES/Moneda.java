@@ -24,8 +24,19 @@ public class Moneda {
 		this.volatilidad = volatilidad;
 	}
 
-	public Moneda() {
-
+	public Moneda(String nomenclatura,double cantidad) {
+		this.nomenclatura= nomenclatura;
+		this.cantidad = cantidad;
+	}
+	
+	public Moneda(double precio, String nomenclatura) {
+		this.nomenclatura= nomenclatura;
+		this.precio = precio;
+	}
+	
+	public Moneda(double precio, double cantidad) {
+		this.cantidad = cantidad;
+		this.precio = precio;
 	}
 
 	public double getPrecio() {
@@ -75,7 +86,6 @@ public class Moneda {
 	}
 
 	public double convertir(double cantidad, Moneda moneda) {
-
 		double cantidadDolares = cantidad * this.precio;
 		double cantidadOtro = cantidadDolares / moneda.getPrecio();
 		return cantidadOtro;

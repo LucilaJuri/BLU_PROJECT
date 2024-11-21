@@ -57,7 +57,7 @@ public class ActivoDaoJDBC implements ActivoDao {
 			String sql = ("SELECT * FROM ACTIVOS WHERE IDUSUARIO=" + idusuario + ";");
 			ResultSet result = st.executeQuery(sql);
 			while (result.next()) {
-				listaActivos.add(new Moneda(0, result.getDouble("CANTIDAD"), "", result.getString("NOMENCLATURA"), 0));
+				listaActivos.add(new Moneda(result.getString("NOMENCLATURA"),result.getDouble("CANTIDAD")));
 			}
 			st.close();
 			return listaActivos;

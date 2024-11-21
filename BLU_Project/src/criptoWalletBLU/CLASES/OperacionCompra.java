@@ -1,6 +1,7 @@
 package criptoWalletBLU.CLASES;
 
 public class OperacionCompra {
+	private int idUsuario;
 	private String cripto;
 	private String fiat;
 	private double cantCripto;
@@ -39,7 +40,8 @@ public class OperacionCompra {
 		this.cantFiat = cantFiat;
 	}
 
-	public OperacionCompra(String cripto, String fiat, double cantCripto, double cantFiat, String fecha) {
+	public OperacionCompra(int idUsuario, String cripto, String fiat, double cantCripto, double cantFiat, String fecha) {
+		this.idUsuario=idUsuario;
 		this.cripto = cripto;
 		this.fiat = fiat;
 		this.cantCripto = cantCripto;
@@ -53,6 +55,14 @@ public class OperacionCompra {
 
 	public void setFecha(String fecha) {
 		this.fecha = fecha;
+	}
+
+	public int getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(int idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 
 }

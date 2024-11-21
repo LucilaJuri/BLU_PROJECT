@@ -12,13 +12,22 @@ public class Persona {
 	private Fecha fechaNacimiento;
 
 	/** @see Fecha */
-
+	
+	public Persona() {
+		
+	}
+	
 	public Persona(String nombre, String apellido, String pais, int dni, Fecha fechaNacimiento) {
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.pais = pais;
 		this.dni = dni;
 		this.fechaNacimiento = fechaNacimiento;
+	}
+	
+	public Persona(String nombre, String apellido) {
+		this.nombre=nombre;
+		this.apellido=apellido;
 	}
 
 	public String getNombre() {

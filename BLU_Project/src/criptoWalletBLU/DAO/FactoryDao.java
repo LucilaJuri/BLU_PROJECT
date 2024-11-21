@@ -16,4 +16,12 @@ public class FactoryDao {
 	public static DatosSwapDao getDatosSwapDao() {
 		return new DatosSwapDaoJDBC();
 	}
+	
+	public static UsuariosDao getUsuariosDao() {
+		return new UsuariosDaoJDBC();
+	}
+	
+	public static PersonasDao getPersonasDao() {
+		return new PersonasDaoJDBC();
+	}
 }

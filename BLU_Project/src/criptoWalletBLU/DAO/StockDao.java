@@ -27,4 +27,8 @@ public interface StockDao {
 	public double selectCantidadNomenclatura(Moneda moneda);
 
 	public List<Moneda> selectStockCripto();
+	
+	public List<Moneda> selectMonedasUsuario(int idUsuario);
+	
+	public int updatePrecio(String nomenclatura, double precio);
 }

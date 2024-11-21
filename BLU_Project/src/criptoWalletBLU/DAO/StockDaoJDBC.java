@@ -22,9 +22,39 @@ public class StockDaoJDBC implements StockDao {
 					+ "	\"CANTIDAD\"	REAL NOT NULL,\r\n" + "	\"NOMBRE\"	TEXT NOT NULL UNIQUE,\r\n"
 					+ "	\"VOLATILIDAD\"	REAL,\r\n" + "	\"TIPO\"	TEXT NOT NULL,\r\n"
 					+ "	PRIMARY KEY(\"NOMENCLATURA\")\r\n" + ");");
-			int result = st.executeUpdate(sql);
+			st.executeUpdate(sql);
+			sql = "INSERT OR IGNORE INTO STOCK (NOMENCLATURA, PRECIO, CANTIDAD, NOMBRE, VOLATILIDAD, TIPO) " +
+		             "VALUES ('BTC', " + 0 + ", " + 0 + ", 'BITCOIN', " + 0 + ", 'CRIPTO');";
+			st.executeUpdate(sql);
+			sql = "INSERT OR IGNORE INTO STOCK (NOMENCLATURA, PRECIO, CANTIDAD, NOMBRE, VOLATILIDAD, TIPO) " +
+		             "VALUES ('ETH', " + 0 + ", " + 0 + ", 'ETHEREUM', " + 0 + ", 'CRIPTO');";
+			st.executeUpdate(sql);
+			sql = "INSERT OR IGNORE INTO STOCK (NOMENCLATURA, PRECIO, CANTIDAD, NOMBRE, VOLATILIDAD, TIPO) " +
+		             "VALUES ('USDC', " + 0 + ", " + 0 + ", 'USDCOIN', " + 0 + ", 'CRIPTO');";
+			st.executeUpdate(sql);
+			sql = "INSERT OR IGNORE INTO STOCK (NOMENCLATURA, PRECIO, CANTIDAD, NOMBRE, VOLATILIDAD, TIPO) " +
+		             "VALUES ('USDT', " + 0 + ", " + 0 + ", 'TETHER', " + 0 + ", 'CRIPTO');";
+			st.executeUpdate(sql);
+			sql = "INSERT OR IGNORE INTO STOCK (NOMENCLATURA, PRECIO, CANTIDAD, NOMBRE, VOLATILIDAD, TIPO) " +
+		             "VALUES ('DOGE', " + 0 + ", " + 0 + ", 'DOGECOIN', " + 0 + ", 'CRIPTO');";
+			st.executeUpdate(sql);
+			sql = "INSERT OR IGNORE INTO STOCK (NOMENCLATURA, PRECIO, CANTIDAD, NOMBRE, VOLATILIDAD, TIPO) " +
+		             "VALUES ('USD', " + 1 + ", " + 0 + ", 'DOLAR', " + 0 + ", 'FIAT');";
+			st.executeUpdate(sql);
+			sql = "INSERT OR IGNORE INTO STOCK (NOMENCLATURA, PRECIO, CANTIDAD, NOMBRE, VOLATILIDAD, TIPO) " +
+		             "VALUES ('EUR', " + 0 + ", " + 0 + ", 'EURO', " + 0 + ", 'FIAT');";
+			st.executeUpdate(sql);
+			sql = "INSERT OR IGNORE INTO STOCK (NOMENCLATURA, PRECIO, CANTIDAD, NOMBRE, VOLATILIDAD, TIPO) " +
+		             "VALUES ('BRL', " + 0 + ", " + 0 + ", 'REAL', " + 0 + ", 'FIAT');";
+			st.executeUpdate(sql);
+			sql = "INSERT OR IGNORE INTO STOCK (NOMENCLATURA, PRECIO, CANTIDAD, NOMBRE, VOLATILIDAD, TIPO) " +
+		             "VALUES ('ARS', " + 0 + ", " + 0 + ", 'PESO ARGENTINO', " + 0 + ", 'FIAT');";
+			st.executeUpdate(sql);
+			sql = "INSERT OR IGNORE INTO STOCK (NOMENCLATURA, PRECIO, CANTIDAD, NOMBRE, VOLATILIDAD, TIPO) " +
+		             "VALUES ('GBP', " + 0 + ", " + 0 + ", 'LIBRAS', " + 0 + ", 'FIAT');";
+			st.executeUpdate(sql);
 			st.close();
-			return result;
+			return 1;
 		} catch (SQLException e) {
 			System.out.println("ERROR EN METODO: crearTablaStock (clase StockDaoJDBC)");
 			System.out.println(e.getMessage());
@@ -215,6 +245,44 @@ public class StockDaoJDBC implements StockDao {
 			return resultado;
 		} catch (SQLException e) {
 			System.out.println("ERROR EN METODO: selectCantidadNomenclatura (clase StockDaoJDBC)");
+			System.out.println(e.getMessage());
+			return 0;
+		}
+	}
+	
+	public List<Moneda> selectMonedasUsuario(int idUsuario) {
+		Connection coneccion = null;
+		List<Moneda> listaMonedas = new ArrayList<Moneda>();
+		try {
+			coneccion = SingletonConexiones.getConexion();
+			Statement st = coneccion.createStatement();
+			String sql = ("SELECT A.CANTIDAD, S.PRECIO FROM ACTIVOS A INNER JOIN STOCK S ON A.NOMENCLATURA=S.NOMENCLATURA WHERE A.IDUSUARIO="
+					+ idUsuario + ";");
+			ResultSet result = st.executeQuery(sql);
+			while (result.next()) {
+				listaMonedas.add(new Moneda(result.getDouble("PRECIO"),result.getDouble("CANTIDAD")));
+			}
+			st.close();
+			return listaMonedas;
+		} catch (SQLException e) {
+			System.out.println("ERROR EN METODO: selectMonedasUsuario (clase StockDaoJDBC)");
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
+	
+	public int updatePrecio(String nomenclatura, double precio) {
+		Connection coneccion = null;
+		try {
+			coneccion = SingletonConexiones.getConexion();
+			Statement st = coneccion.createStatement();
+			String sql = ("UPDATE STOCK " + "SET PRECIO = " + precio + " WHERE NOMENCLATURA='"
+					+ nomenclatura + "';");
+			int result = st.executeUpdate(sql);
+			st.close();
+			return result;
+		} catch (SQLException e) {
+			System.out.println("ERROR EN METODO: updatePrecio (clase StockDaoJDBC)");
 			System.out.println(e.getMessage());
 			return 0;
 		}
