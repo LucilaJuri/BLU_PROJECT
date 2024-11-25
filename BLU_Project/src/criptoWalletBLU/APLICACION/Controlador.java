@@ -9,6 +9,10 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import criptoWalletBLU.EXCEPTIONS.ExcepcionPopupError;
+import criptoWalletBLU.EXCEPTIONS.MailExcepcion;
+import criptoWalletBLU.EXCEPTIONS.TerminosExcepcion;
+
 public class Controlador {
 	
 	private Vista vista;
@@ -85,15 +89,10 @@ public class Controlador {
 	public class BotonRegistrarseListener implements ActionListener{
 
 		public void actionPerformed(ActionEvent e) {
+			try {
 			vista.getPanelSignUp().setTerminos(vista.getPanelSignUp().getCheckTerminos().isSelected());
-			if (! vista.getPanelSignUp().getTerminos()) {
-				JOptionPane.showMessageDialog(vista.getPanelSignUp(), "Debes aceptar nuestros Términos y Condiciones de uso para poder registrarte.", "Términos y Condiciones de uso", JOptionPane.ERROR_MESSAGE);
-				return;
-			}else {
-			if (modelo.existeMail(vista.getPanelSignUp().getTextoMail().getText())) {
-				JOptionPane.showMessageDialog(vista.getPanelSignUp(), "La direccion de E-Mail: "+vista.getPanelSignUp().getTextoMail().getText()+" se encuentra en uso.", "E-Mail no disponible.", JOptionPane.ERROR_MESSAGE);
-				return;
-			}else {
+			if (! vista.getPanelSignUp().getTerminos())throw new TerminosExcepcion();
+			if (modelo.existeMail(vista.getPanelSignUp().getTextoMail().getText())) throw new MailExcepcion(vista.getPanelSignUp().getTextoMail().getText());else {
 			if (vista.getPanelSignUp().getTextoMail().getText().isBlank() || vista.getPanelSignUp().getTextoNombre().getText().isBlank() || vista.getPanelSignUp().getTextoApellido().getText().isBlank() || new String(vista.getPanelSignUp().getTextoContrasena().getPassword()).isBlank()) {
 				JOptionPane.showMessageDialog(vista.getPanelSignUp(), "Es obligatorio completar todos los campos solicitados.", "Campos vacíos", JOptionPane.ERROR_MESSAGE);
 				return;
@@ -103,7 +102,11 @@ public class Controlador {
 				vista.getPanelSignUp().setVisible(false);
 				inicializarMenu();
 			}
-			}}
+			}
+		}
+			catch (ExcepcionPopupError x) {
+				JOptionPane.showMessageDialog(vista.getPanelSignUp(),x.getCuerpo(),x.getTitulo(),x.getIcono() );	
+			}
 		}
 	}
 
@@ -152,14 +155,9 @@ public class Controlador {
 	public void iniciarSegundoPlano() {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(() -> {
-            try {
-            	modelo.actualizarCriptos();
-            	SwingUtilities.invokeLater(() -> {
-                });
-
-            } catch (Exception e) {
-                System.err.println("Error durante la actualización: " + e.getMessage());
-            }
+        modelo.actualizarCriptos();
+        SwingUtilities.invokeLater(() -> {
+        });
         }, 0, 5, TimeUnit.SECONDS);
 	}
 }

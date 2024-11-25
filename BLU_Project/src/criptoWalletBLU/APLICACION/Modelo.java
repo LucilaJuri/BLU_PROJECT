@@ -81,7 +81,7 @@ public class Modelo {
 	}
 	
 	public String getIniciales() {
-		 return (personaLogeada.getNombre().substring(0,1)+personaLogeada.getApellido().substring(0,1));
+		 return (personaLogeada.getNombre().substring(0,1)+personaLogeada.getApellido().substring(0,1)).toUpperCase();
 	}
 	
 	public double getSaldo() {

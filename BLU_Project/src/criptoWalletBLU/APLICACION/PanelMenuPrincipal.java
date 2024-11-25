@@ -120,8 +120,6 @@ public class PanelMenuPrincipal extends JPanel {
         g.fillRect(400, 0, 5, 600);
         g.setColor(Color.WHITE);
         g.drawRect(400, 0, 5, 600);
-        g.setColor(new Color(85, 219, 68));
-        g.fillRoundRect(800, 70, 100, 40, 20, 20);
     }
 
 	public JLabel getLabelLetrasFoto() {

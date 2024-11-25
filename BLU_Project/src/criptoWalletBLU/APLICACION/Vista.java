@@ -14,7 +14,7 @@ public class Vista extends JFrame{
     public Vista() {
     	setTitle("BLU PROJECT: CRIPTO WALLET");
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	setResizable(false);
+    	//setResizable(false);
     	setLayout(null);
     	setSize(450,300);
     	setLocationRelativeTo(null);
