@@ -72,15 +72,13 @@ public class PersonasDaoJDBC implements PersonasDao {
 	
 	public Persona selectPersona(int idPersona) {
 		Connection coneccion = null;
-		Persona persona = null;
+		Persona persona;
 		try {
 			coneccion = SingletonConexiones.getConexion();
 			Statement st = coneccion.createStatement();
 			String sql = "SELECT * FROM PERSONA WHERE ID="+idPersona;
 			ResultSet result = st.executeQuery(sql);
-			if (result.next()) {
-				persona = new Persona(result.getString("NOMBRE"),result.getString("APELLIDO"));
-			}
+			persona = new Persona(result.getString("NOMBRE"),result.getString("APELLIDO"));
 			st.close();
 			return persona;
 		} catch (SQLException e) {

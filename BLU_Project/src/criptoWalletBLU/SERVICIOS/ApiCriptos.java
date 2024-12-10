@@ -11,7 +11,7 @@ public class ApiCriptos {
 	private JSONObject json;
 	
 	public ApiCriptos() {
-		//actualizarApiCriptos();
+		actualizarApiCriptos();
 	}
 	
 	public double getBTC() {
@@ -54,5 +54,16 @@ public class ApiCriptos {
 
 	public JSONObject getJson() {
 		return json;
+	}
+
+	public double getPrecio(String nomenclatura) {
+		switch (nomenclatura) {
+		case "BTC": return getBTC();
+		case "ETH": return getETH();
+		case "USDC": return getUSDC();
+		case "USDT": return getUSDT();
+		case "DOGE": return getDOGE();
+		}
+		return 0;
 	}
 }

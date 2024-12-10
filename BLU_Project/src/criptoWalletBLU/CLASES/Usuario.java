@@ -123,7 +123,10 @@ public class Usuario {
 	}
 	
 	public Usuario() {
-		
+	}
+	
+	public boolean estaVacio() {
+		return (mail==null);//Usamos cualquier campo para ver si fue creado o no
 	}
 
 	public Usuario(int idUsuario, int idPersona, CuentaBancaria cuentaBancaria, List<Preguntas> preguntas,

@@ -126,9 +126,8 @@ public class PanelSignUp extends JPanel {
 //                visibilidad[0] = !visibilidad[0];
 //            }
 //        });
-		
-		labelTerminos = new JLabel("Acepta los Términos y Condiciones de uso:");
-		labelTerminos.setBounds(80, 270, 270, 30);
+		labelTerminos = new JLabel("<html><u>Acepta los Términos y Condiciones de uso:</u></html>");
+		labelTerminos.setBounds(80, 270, 275, 30);
 		labelTerminos.setFont(new Font("Arial", Font.BOLD, 13));
 		labelTerminos.setForeground(Color.WHITE);
 		add(labelTerminos);

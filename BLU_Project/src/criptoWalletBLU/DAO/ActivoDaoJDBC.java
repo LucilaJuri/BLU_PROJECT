@@ -1,5 +1,6 @@
 package criptoWalletBLU.DAO;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +20,7 @@ public class ActivoDaoJDBC implements ActivoDao {
 			Statement st = coneccion.createStatement();
 			String sql = ("CREATE TABLE IF NOT EXISTS \"ACTIVOS\" (\r\n" + "	\"DIRECCION\"	INTEGER UNIQUE,\r\n"
 					+ "	\"IDUSUARIO\"	INTEGER NOT NULL,\r\n" + "	\"CANTIDAD\"	REAL NOT NULL,\r\n"
-					+ "	\"NOMENCLATURA\"	TEXT NOT NULL UNIQUE,\r\n"
+					+ "	\"NOMENCLATURA\"	TEXT NOT NULL,\r\n"
 					+ "	PRIMARY KEY(\"DIRECCION\" AUTOINCREMENT)\r\n" + ");");
 			int result = st.executeUpdate(sql);
 			st.close();
@@ -31,13 +32,13 @@ public class ActivoDaoJDBC implements ActivoDao {
 		}
 	}
 
-	public int insertActivo(int idusuario, Moneda moneda) {
+	public int insertActivo(int idusuario, String nomenclatura, BigDecimal cantidad) {
 		Connection coneccion = null;
 		try {
 			coneccion = SingletonConexiones.getConexion();
 			Statement st = coneccion.createStatement();
 			String sql = ("INSERT INTO ACTIVOS (IDUSUARIO, CANTIDAD, NOMENCLATURA)" + "VALUES (" + idusuario + ", "
-					+ moneda.getCantidad() + ", " + "'" + moneda.getNomenclatura() + "');");
+					+ cantidad + ", " + "'" + nomenclatura + "');");
 			int result = st.executeUpdate(sql);
 			st.close();
 			return result;
@@ -109,13 +110,13 @@ public class ActivoDaoJDBC implements ActivoDao {
 		}
 	}
 
-	public int updateCantidad(int idusuario, Moneda moneda) {
+	public int updateCantidad(int idusuario, String nomenclatura, double cantidad) {
 		Connection coneccion = null;
 		try {
 			coneccion = SingletonConexiones.getConexion();
 			Statement st = coneccion.createStatement();
-			String sql = ("UPDATE ACTIVOS " + "SET CANTIDAD = " + moneda.getCantidad() + " WHERE NOMENCLATURA='"
-					+ moneda.getNomenclatura() + "' AND IDUSUARIO = " + idusuario + ";");
+			String sql = ("UPDATE ACTIVOS " + "SET CANTIDAD = " + cantidad + " WHERE NOMENCLATURA='"
+					+ nomenclatura + "' AND IDUSUARIO = " + idusuario + ";");
 			int resultado = st.executeUpdate(sql);
 			st.close();
 			return resultado;
@@ -126,12 +127,12 @@ public class ActivoDaoJDBC implements ActivoDao {
 		}
 	}
 
-	public double selectCantidadNomenclatura(Moneda moneda) {
+	public double selectCantidadNomenclatura(String nomenclatura, int idUsuario) {
 		Connection coneccion = null;
 		try {
 			coneccion = SingletonConexiones.getConexion();
 			Statement st = coneccion.createStatement();
-			String sql = ("SELECT CANTIDAD FROM ACTIVOS WHERE NOMENCLATURA='" + moneda.getNomenclatura() + "';");
+			String sql = ("SELECT CANTIDAD FROM ACTIVOS WHERE NOMENCLATURA='" + nomenclatura + "' AND IDUSUARIO="+idUsuario+";");
 			ResultSet result = st.executeQuery(sql);
 			double resultado = result.getDouble("CANTIDAD");
 			st.close();
@@ -140,6 +141,20 @@ public class ActivoDaoJDBC implements ActivoDao {
 			System.out.println("ERROR EN METODO: selectCantidadNomenclatura (clase ActivoDaoJDBC)");
 			System.out.println(e.getMessage());
 			return -1;
+		}
+	}
+	
+	public void borrarActivos(int idUsuario) {
+		Connection coneccion = null;
+		try {
+			coneccion = SingletonConexiones.getConexion();
+			Statement st = coneccion.createStatement();
+			String sql = ("DELETE FROM ACTIVOS WHERE IDUSUARIO="+idUsuario+";");
+			st.executeUpdate(sql);
+			st.close();
+		} catch (SQLException e) {
+			System.out.println("ERROR EN METODO: borrarActivos (clase ActivoDaoJDBC)");
+			System.out.println(e.getMessage());
 		}
 	}
 

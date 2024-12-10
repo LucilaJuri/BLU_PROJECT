@@ -14,7 +14,6 @@ public class Persona {
 	/** @see Fecha */
 	
 	public Persona() {
-		
 	}
 	
 	public Persona(String nombre, String apellido, String pais, int dni, Fecha fechaNacimiento) {

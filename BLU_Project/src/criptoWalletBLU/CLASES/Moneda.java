@@ -38,6 +38,21 @@ public class Moneda {
 		this.cantidad = cantidad;
 		this.precio = precio;
 	}
+	
+	public Moneda(String nombre, String nomenclatura, double precio, double cantidad) {
+		this.nombre=nombre;
+		this.nomenclatura=nomenclatura;
+		this.cantidad = cantidad;
+		this.precio = precio;
+	}
+
+	public Moneda(String nomenclatura) {
+		this.nomenclatura=nomenclatura;
+	}
+
+	public Moneda() {
+		
+	}
 
 	public double getPrecio() {
 		return precio;

@@ -67,7 +67,7 @@ public class PanelLogIn extends JPanel {
 		botonMostrarContrasena.setFont(new Font("Arial", Font.BOLD, 14));
 		botonMostrarContrasena.setFocusPainted(false);
 		botonMostrarContrasena.setBackground(new Color(1,87,146));
-		botonMostrarContrasena.setForeground(Color.WHITE); 
+		botonMostrarContrasena.setForeground(Color.WHITE);
 		botonMostrarContrasena.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
 		add(botonMostrarContrasena);
 		
